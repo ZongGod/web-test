@@ -28,11 +28,45 @@
         }
     </script>
     
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .defect-item {
+                display: grid;
+                grid-template-columns: 1fr 1fr 30px;
+                gap: 8px;
+                padding: 8px;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            .defect-item:first-child {
+                font-weight: 600;
+                background-color: #f8fafc;
+            }
+            .record-item {
+                transition: all 0.2s ease;
+            }
+            .record-item:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+            .animate-fade-in {
+                animation: fadeIn 0.3s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        }
+    </style>
+    
     <!-- Firebase SDK -->
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -338,7 +372,7 @@
                 
                 records.forEach(record => {
                     const recordItem = document.createElement('div');
-                    recordItem.className = 'record-item bg-white rounded-lg shadow-sm border border-gray-100 mb-3 overflow-hidden transition-all hover:shadow-md';
+                    recordItem.className = 'record-item bg-white rounded-lg shadow-sm border border-gray-100 mb-3 overflow-hidden transition-all hover:shadow-md animate-fade-in';
                     
                     // 格式化时间
                     const timestamp = new Date(record.timestamp.toMillis());
@@ -432,40 +466,6 @@
             updatePreview();
         });
     </script>
-    
-    <!-- 自定义工具类 -->
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .defect-item {
-                display: grid;
-                grid-template-columns: 1fr 1fr 30px;
-                gap: 8px;
-                padding: 8px;
-                border-bottom: 1px solid #f0f0f0;
-            }
-            .defect-item:first-child {
-                font-weight: 600;
-                background-color: #f8fafc;
-            }
-            .record-item {
-                transition: all 0.2s ease;
-            }
-            .record-item:hover {
-                transform: translateY(-1px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            }
-            .animate-fade-in {
-                animation: fadeIn 0.3s ease-in-out;
-            }
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-        }
-    </style>
 </head>
 
 <body class="bg-gray-50 font-inter">
