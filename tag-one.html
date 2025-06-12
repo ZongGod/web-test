@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,24 +7,700 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        /* 原有的CSS样式保持不变 */
+        :root {
+            --primary: #165DFF;
+            --secondary: #6B7280;
+            --success: #00B42A;
+            --danger: #F53F3F;
+            --warning: #FF7D00;
+            --info: #86909C;
+            --light: #F2F3F5;
+            --dark: #1D2129;
+            --background: #F5F7FA;
+            --card-bg: #FFFFFF;
+            --border: #E5E6EB;
+            --text-primary: #1D2129;
+            --text-secondary: #4E5969;
+            --text-disabled: #86909C;
+            --text-link: #165DFF;
+            --font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            font-family: var(--font-family);
         }
 
-        /* ... 其他样式保持不变 ... */
+        body {
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-title {
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-title i {
+            margin-right: 8px;
+        }
+
+        .header-info {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--light);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 14px;
+            color: var(--text-primary);
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0E42CC;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background-color: #D82121;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5A626F;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table th {
+            background-color: var(--light);
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(22, 93, 255, 0.05);
+        }
+
+        .defect-list {
+            margin-top: 24px;
+        }
+
+        .defect-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 100px;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+        }
+
+        .defect-item:first-child {
+            background-color: var(--light);
+            font-weight: 500;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        .defect-item:last-child {
+            border-bottom: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-disabled);
+        }
+
+        .preview-info {
+            margin-top: 24px;
+            padding: 16px;
+            background-color: rgba(22, 93, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .preview-item {
+            display: flex;
+            margin-bottom: 8px;
+        }
+
+        .preview-label {
+            width: 120px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .record-history {
+            margin-top: 24px;
+        }
+
+        .date-group {
+            margin-bottom: 16px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .date-header {
+            padding: 12px 16px;
+            background-color: var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .date-header:hover {
+            background-color: rgba(22, 93, 255, 0.1);
+        }
+
+        .date-header span {
+            font-weight: 500;
+        }
+
+        .date-records {
+            background-color: var(--card-bg);
+        }
+
+        .record-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .record-item:last-child {
+            border-bottom: none;
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .record-time {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .record-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .record-preview-item {
+            padding: 12px;
+            background-color: rgba(22, 93, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .record-preview-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .record-preview-value {
+            font-weight: 500;
+        }
+
+        .record-actions {
+            text-align: right;
+        }
+
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            flex: 1;
+            min-width: 200px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+            align-items: center;
+        }
+
+        .sort-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+            align-items: center;
+        }
+
+        .sort-filter label {
+            font-weight: 500;
+            margin-right: 8px;
+        }
+
+        .sort-filter select,
+        .sort-filter input {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .delete-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .delete-modal-content {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .delete-modal-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-modal-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .delete-modal-close {
+            font-size: 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .delete-modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .delete-modal-message {
+            padding: 24px;
+        }
+
+        .delete-modal-actions {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .text-danger {
+            color: var(--danger);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-title {
+                margin-bottom: 8px;
+            }
+
+            .defect-item {
+                grid-template-columns: 1fr 1fr 80px;
+                padding: 10px 12px;
+            }
+
+            .record-preview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                flex-direction: column;
+            }
+
+            .actions,
+            .sort-filter {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .sort-filter label {
+                margin-bottom: 4px;
+            }
+
+            .sort-filter select,
+            .sort-filter input {
+                width: 100%;
+            }
+        }
     </style>
 </head>
-
 <body>
     <div class="container">
-        <!-- 页面结构保持不变 -->
+        <div class="header">
+            <div class="header-title">
+                <i class="fas fa-clipboard-list"></i>
+                定子产线不良品记录系统
+            </div>
+            <div class="header-info">
+                <span id="currentTime"></span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">添加不良品记录</div>
+            </div>
+            <div class="card-content">
+                <form id="recordForm">
+                    <div class="form-group">
+                        <label for="recordDate" class="form-label">记录日期:</label>
+                        <input type="date" id="recordDate" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="productionLine" class="form-label">生产线:</label>
+                        <input type="text" id="productionLine" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="productModel" class="form-label">产品型号:</label>
+                        <input type="text" id="productModel" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="recorder" class="form-label">记录人员:</label>
+                        <input type="text" id="recorder" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="remark" class="form-label">备注:</label>
+                        <textarea id="remark" class="form-textarea"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="defectType" class="form-label">不良品类型:</label>
+                        <input type="text" id="defectType" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="defectQuantity" class="form-label">数量:</label>
+                        <input type="number" id="defectQuantity" min="1" class="form-input">
+                    </div>
+                    <button type="button" id="addDefect" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> 添加不良品项目
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> 提交记录
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">不良品列表</div>
+            </div>
+            <div class="card-content">
+                <div id="defectList">
+                    <div class="defect-item">
+                        <div>不良品类型</div>
+                        <div>数量</div>
+                        <div>操作</div>
+                    </div>
+                    <div class="empty-state" id="emptyDefects">暂无不良品记录，请添加项目</div>
+                </div>
+                <p class="mt-4">总不良品数量: <span id="totalDefects" class="font-bold">0</span></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">记录预览</div>
+            </div>
+            <div class="card-content">
+                <div class="preview-info">
+                    <div class="preview-item">
+                        <div class="preview-label">记录日期:</div>
+                        <div id="previewDate">未选择</div>
+                    </div>
+                    <div class="preview-item">
+                        <div class="preview-label">生产线:</div>
+                        <div id="previewLine">未选择</div>
+                    </div>
+                    <div class="preview-item">
+                        <div class="preview-label">产品型号:</div>
+                        <div id="previewModel">未填写</div>
+                    </div>
+                    <div class="preview-item">
+                        <div class="preview-label">记录人员:</div>
+                        <div id="previewRecorder">未填写</div>
+                    </div>
+                    <div class="preview-item">
+                        <div class="preview-label">总不良品数量:</div>
+                        <div id="previewTotalDefects">0</div>
+                    </div>
+                    <div class="preview-item">
+                        <div class="preview-label">不良品类型:</div>
+                        <div id="previewDefectTypes">无</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-title">总记录数</div>
+                <div class="stat-value" id="totalRecords">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">总不良品数</div>
+                <div class="stat-value" id="totalDefectsStat">0</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">记录历史</div>
+                <div class="record-count" id="recordCount">已保存 0 条记录</div>
+            </div>
+            <div class="card-content">
+                <div class="sort-filter">
+                    <div>
+                        <label for="sortField">排序字段:</label>
+                        <select id="sortField">
+                            <option value="date">日期</option>
+                            <option value="line">生产线</option>
+                            <option value="defects">不良品数</option>
+                            <option value="timestamp">提交时间</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="sortOrder">排序顺序:</label>
+                        <select id="sortOrder">
+                            <option value="asc">升序</option>
+                            <option value="desc">降序</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="filterLine">筛选生产线:</label>
+                        <input type="text" id="filterLine" placeholder="输入生产线编号">
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="button" id="exportAllRecords" class="btn btn-primary">
+                        <i class="fas fa-download"></i> 导出所有记录
+                    </button>
+                    <button type="button" id="exportSelectedRecords" class="btn btn-primary">
+                        <i class="fas fa-download"></i> 导出选中记录
+                    </button>
+                    <button type="button" id="deleteSelectedRecords" class="btn btn-danger" disabled>
+                        <i class="fas fa-trash"></i> 删除选中记录
+                    </button>
+                    <div class="ml-auto">
+                        <input type="checkbox" id="selectAllRecords">
+                        <label for="selectAllRecords" class="ml-2">全选</label>
+                        <span id="selectedCount" class="ml-2">0</span> 条记录被选中
+                    </div>
+                </div>
+
+                <div id="recordHistory"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- 删除确认对话框 -->
     <div id="deleteModal" class="delete-modal">
         <div class="delete-modal-content">
             <div class="delete-modal-header">
@@ -43,14 +718,10 @@
         </div>
     </div>
 
-    <!-- 添加Firebase SDK -->
     <script type="module">
-        // 导入Firebase模块
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
 
-        // Firebase配置
         const firebaseConfig = {
             apiKey: "AIzaSyDuknMmqAIKt-bvVkx-bVq8K1liuE4mR04",
             authDomain: "my-data-ca1c8.firebaseapp.com",
@@ -61,12 +732,10 @@
             measurementId: "G-EMKWK3M4KY"
         };
 
-        // 初始化Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const db = getFirestore(app);
 
-        // 获取所有必要的 DOM 元素
+        // DOM元素
         const recordForm = document.getElementById('recordForm');
         const defectList = document.getElementById('defectList');
         const emptyDefects = document.getElementById('emptyDefects');
@@ -91,77 +760,111 @@
         const deleteModalClose = document.getElementById('deleteModalClose');
         const confirmDelete = document.getElementById('confirmDelete');
         const cancelDelete = document.getElementById('cancelDelete');
+        const currentTime = document.getElementById('currentTime');
+        const sortField = document.getElementById('sortField');
+        const sortOrder = document.getElementById('sortOrder');
+        const filterLine = document.getElementById('filterLine');
 
-        // 存储所有记录
+        // 全局变量
         let records = [];
         let currentDeleteRecordId;
 
+        // 更新当前时间
+        function updateCurrentTime() {
+            const now = new Date();
+            currentTime.textContent = now.toLocaleString('zh-CN');
+        }
+
+        // 初始化时间显示并每秒更新
+        updateCurrentTime();
+        setInterval(updateCurrentTime, 1000);
+
         // 添加不良品项目
-        addDefect.addEventListener('click', function () {
+        addDefect.addEventListener('click', () => {
             const defectType = document.getElementById('defectType');
             const defectQuantity = document.getElementById('defectQuantity');
 
-            if (defectType.value && defectQuantity.value > 0) {
-                const newDefect = document.createElement('div');
-                newDefect.classList.add('defect-item');
-                newDefect.innerHTML = `
-                    <div>${defectType.value}</div>
-                    <div>${defectQuantity.value}</div>
-                    <div>
-                        <button type="button" class="btn btn-remove btn-sm">
-                            <i class="fas fa-trash"></i> 删除
-                        </button>
-                    </div>
-                `;
+            if (!defectType.value || !defectQuantity.value || defectQuantity.value <= 0) {
+                alert('请输入有效的不良品类型和数量');
+                return;
+            }
 
-                defectList.appendChild(newDefect);
-                emptyDefects.style.display = 'none';
+            const newDefect = document.createElement('div');
+            newDefect.classList.add('defect-item');
+            newDefect.innerHTML = `
+                <div>${defectType.value}</div>
+                <div>${defectQuantity.value}</div>
+                <div>
+                    <button type="button" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> 删除
+                    </button>
+                </div>
+            `;
 
-                // 计算总不良品数量
-                let total = 0;
-                const defectItems = defectList.querySelectorAll('.defect-item:not(:first-child)');
-                defectItems.forEach(item => {
-                    total += parseInt(item.children[1].textContent);
-                });
-                totalDefects.textContent = total;
-                previewTotalDefects.textContent = total;
+            defectList.appendChild(newDefect);
+            emptyDefects.style.display = 'none';
 
-                // 更新预览的不良品类型
-                const defectTypes = [];
-                defectItems.forEach(item => {
-                    defectTypes.push(item.children[0].textContent);
-                });
-                previewDefectTypes.textContent = defectTypes.join(', ');
+            updateDefectList();
+            updatePreview();
 
-                // 绑定删除按钮事件
-                const removeButton = newDefect.querySelector('.btn-remove');
-                removeButton.addEventListener('click', function () {
+            // 绑定删除按钮事件
+            const removeButton = newDefect.querySelector('.btn-danger');
+            removeButton.addEventListener('click', () => {
+                // 添加删除动画
+                newDefect.style.opacity = '0';
+                newDefect.style.transform = 'translateY(-10px)';
+                newDefect.style.transition = 'all 0.3s ease';
+                
+                setTimeout(() => {
                     newDefect.remove();
                     if (defectList.children.length === 2) {
                         emptyDefects.style.display = 'block';
                     }
+                    updateDefectList();
+                    updatePreview();
+                }, 300);
+            });
 
-                    // 重新计算总不良品数量
-                    let newTotal = 0;
-                    const newDefectItems = defectList.querySelectorAll('.defect-item:not(:first-child)');
-                    newDefectItems.forEach(item => {
-                        newTotal += parseInt(item.children[1].textContent);
-                    });
-                    totalDefects.textContent = newTotal;
-                    previewTotalDefects.textContent = newTotal;
-
-                    // 更新预览的不良品类型
-                    const newDefectTypes = [];
-                    newDefectItems.forEach(item => {
-                        newDefectTypes.push(item.children[0].textContent);
-                    });
-                    previewDefectTypes.textContent = newDefectTypes.join(', ') || '无';
-                });
-            }
+            // 清空输入框
+            defectType.value = '';
+            defectQuantity.value = '';
+            defectType.focus();
         });
 
-        // 提交记录到Firestore
-        recordForm.addEventListener('submit', async function (e) {
+        // 更新不良品列表
+        function updateDefectList() {
+            let total = 0;
+            const defectItems = defectList.querySelectorAll('.defect-item:not(:first-child)');
+            defectItems.forEach(item => {
+                total += parseInt(item.children[1].textContent);
+            });
+            totalDefects.textContent = total;
+        }
+
+        // 更新预览信息
+        function updatePreview() {
+            previewDate.textContent = document.getElementById('recordDate').value || '未选择';
+            previewLine.textContent = document.getElementById('productionLine').value || '未选择';
+            previewModel.textContent = document.getElementById('productModel').value || '未填写';
+            previewRecorder.textContent = document.getElementById('recorder').value || '未填写';
+            
+            // 更新总不良品数量
+            previewTotalDefects.textContent = totalDefects.textContent;
+            
+            // 更新不良品类型
+            const defectItems = defectList.querySelectorAll('.defect-item:not(:first-child)');
+            const defectTypes = [];
+            defectItems.forEach(item => {
+                defectTypes.push(item.children[0].textContent);
+            });
+            previewDefectTypes.textContent = defectTypes.join(', ') || '无';
+        }
+
+        // 表单输入实时预览
+        recordForm.addEventListener('input', updatePreview);
+
+        // 提交记录
+        recordForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const recordDate = document.getElementById('recordDate').value;
@@ -170,6 +873,22 @@
             const recorder = document.getElementById('recorder').value;
             const remark = document.getElementById('remark').value;
             const defectItems = defectList.querySelectorAll('.defect-item:not(:first-child)');
+            
+            if (defectItems.length === 0) {
+                alert("请至少添加一个不良品项目");
+                return;
+            }
+
+            if (!recordDate) {
+                alert("请选择记录日期");
+                return;
+            }
+
+            if (!productionLine) {
+                alert("请输入生产线");
+                return;
+            }
+
             const defects = [];
             let total = 0;
 
@@ -192,9 +911,9 @@
             };
 
             try {
-                // 添加到Firestore
                 const docRef = await addDoc(collection(db, "records"), newRecord);
                 console.log("记录已添加，ID: ", docRef.id);
+                alert("记录添加成功！");
                 
                 // 重置表单
                 recordForm.reset();
@@ -206,31 +925,23 @@
                     </div>
                     <div class="empty-state" id="emptyDefects">暂无不良品记录，请添加项目</div>
                 `;
-                totalDefects.textContent = 0;
-                previewDate.textContent = '未选择';
-                previewLine.textContent = '未选择';
-                previewModel.textContent = '未填写';
-                previewRecorder.textContent = '未填写';
-                previewTotalDefects.textContent = 0;
-                previewDefectTypes.textContent = '无';
+                updateDefectList();
+                updatePreview();
             } catch (error) {
                 console.error("添加记录失败: ", error);
                 alert("添加记录失败，请重试");
             }
         });
 
-        // 从Firestore获取记录
+        // 获取记录
         const fetchRecords = async () => {
             try {
-                // 创建按时间戳降序排列的查询
                 const q = query(collection(db, "records"), orderBy("timestamp", "desc"));
-                
-                // 设置实时监听
                 onSnapshot(q, (snapshot) => {
                     records = [];
                     snapshot.forEach((doc) => {
                         const record = doc.data();
-                        record.id = doc.id; // 添加文档ID
+                        record.id = doc.id;
                         records.push(record);
                     });
                     updateRecordHistory();
@@ -249,9 +960,9 @@
 
             if (filteredRecords.length === 0) {
                 recordHistory.innerHTML = `
-                    <div style="text-align: center; padding: 30px;">
+                    <div class="empty-state">
                         <i class="fas fa-database" style="font-size: 3rem; color: #dadce0; margin-bottom: 15px;"></i>
-                        <p style="color: var(--secondary);">暂无记录数据</p>
+                        <p>暂无记录数据</p>
                     </div>
                 `;
                 return;
@@ -276,9 +987,11 @@
                     <div class="date-records">
                         ${dateGroups[date].map(record => `
                             <div class="record-item">
-                                <input type="checkbox" class="record-checkbox" data-id="${record.id}">
                                 <div class="record-header">
-                                    <h4>生产产线: ${record.line}线</h4>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" class="record-checkbox" data-id="${record.id}">
+                                        <h4 class="ml-3">生产产线: ${record.line}线</h4>
+                                    </div>
                                     <span class="record-time">提交时间: ${new Date(record.timestamp).toLocaleString()}</span>
                                 </div>
                                 <div class="record-preview-grid">
@@ -300,7 +1013,7 @@
                                     </div>
                                 </div>
                                 <div class="record-actions">
-                                    <button type="button" class="btn btn-delete btn-sm" data-id="${record.id}">
+                                    <button type="button" class="btn btn-danger btn-sm" data-id="${record.id}">
                                         <i class="fas fa-trash"></i> 删除
                                     </button>
                                 </div>
@@ -313,22 +1026,30 @@
 
                 // 绑定折叠/展开事件
                 const dateHeader = dateGroup.querySelector('.date-header');
-                dateHeader.addEventListener('click', function () {
+                dateHeader.addEventListener('click', () => {
                     dateGroup.classList.toggle('collapsed');
+                    const icon = dateHeader.querySelector('i');
+                    if (dateGroup.classList.contains('collapsed')) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-right');
+                    } else {
+                        icon.classList.remove('fa-chevron-right');
+                        icon.classList.add('fa-chevron-down');
+                    }
                 });
 
                 // 绑定单个删除按钮事件
-                const deleteButtons = dateGroup.querySelectorAll('.btn-delete');
+                const deleteButtons = dateGroup.querySelectorAll('.btn-danger');
                 deleteButtons.forEach(button => {
-                    button.addEventListener('click', function () {
+                    button.addEventListener('click', () => {
                         currentDeleteRecordId = this.dataset.id;
-                        deleteModal.style.display = 'block';
+                        deleteModal.style.display = 'flex';
                     });
                 });
             }
 
             // 绑定全选/反选事件
-            selectAllRecords.addEventListener('change', function () {
+            selectAllRecords.addEventListener('change', () => {
                 const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
                 checkboxes.forEach(checkbox => {
                     checkbox.checked = this.checked;
@@ -339,9 +1060,7 @@
             // 绑定单个复选框事件
             const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
             checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function () {
-                    updateSelectedCount();
-                });
+                checkbox.addEventListener('change', updateSelectedCount);
             });
 
             recordCount.textContent = `已保存 ${filteredRecords.length} 条记录`;
@@ -362,7 +1081,7 @@
             const sortField = document.getElementById('sortField').value;
             const sortOrder = document.getElementById('sortOrder').value;
 
-            return records.sort((a, b) => {
+            return [...records].sort((a, b) => {
                 let valueA, valueB;
                 switch (sortField) {
                     case 'date':
@@ -384,9 +1103,9 @@
                 }
 
                 if (sortOrder === 'asc') {
-                    return valueA - valueB;
+                    return valueA > valueB ? 1 : -1;
                 } else {
-                    return valueB - valueA;
+                    return valueA < valueB ? 1 : -1;
                 }
             });
         }
@@ -414,7 +1133,12 @@
         }
 
         // 导出所有记录
-        exportAllRecords.addEventListener('click', function () {
+        exportAllRecords.addEventListener('click', () => {
+            if (records.length === 0) {
+                alert("没有记录可导出");
+                return;
+            }
+            
             const ws = XLSX.utils.json_to_sheet(records);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, '不良品记录');
@@ -422,7 +1146,7 @@
         });
 
         // 导出选中记录
-        exportSelectedRecords.addEventListener('click', function () {
+        exportSelectedRecords.addEventListener('click', () => {
             const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
             const selectedRecords = [];
             checkboxes.forEach(checkbox => {
@@ -435,16 +1159,19 @@
                 }
             });
 
-            if (selectedRecords.length > 0) {
-                const ws = XLSX.utils.json_to_sheet(selectedRecords);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, '不良品记录');
-                XLSX.writeFile(wb, '不良品记录_选中记录.xlsx');
+            if (selectedRecords.length === 0) {
+                alert("请先选择要导出的记录");
+                return;
             }
+            
+            const ws = XLSX.utils.json_to_sheet(selectedRecords);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '不良品记录');
+            XLSX.writeFile(wb, '不良品记录_选中记录.xlsx');
         });
 
-        // 批量删除选中记录
-        deleteSelectedRecords.addEventListener('click', async function () {
+        // 删除选中记录
+        deleteSelectedRecords.addEventListener('click', async () => {
             const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
             const selectedIds = [];
             checkboxes.forEach(checkbox => {
@@ -453,13 +1180,16 @@
                 }
             });
 
-            if (selectedIds.length > 0) {
+            if (selectedIds.length === 0) return;
+
+            if (confirm(`确定要删除选中的 ${selectedIds.length} 条记录吗？此操作不可撤销！`)) {
                 try {
                     for (const id of selectedIds) {
                         await deleteDoc(doc(db, "records", id));
                     }
                     selectAllRecords.checked = false;
                     updateSelectedCount();
+                    alert("删除成功！");
                 } catch (error) {
                     console.error("批量删除记录失败: ", error);
                     alert("批量删除记录失败");
@@ -468,41 +1198,33 @@
         });
 
         // 关闭删除确认对话框
-        deleteModalClose.addEventListener('click', function () {
+        deleteModalClose.addEventListener('click', () => {
             deleteModal.style.display = 'none';
         });
 
-        cancelDelete.addEventListener('click', function () {
+        cancelDelete.addEventListener('click', () => {
             deleteModal.style.display = 'none';
         });
 
         // 确认删除单条记录
-        confirmDelete.addEventListener('click', async function () {
+        confirmDelete.addEventListener('click', async () => {
             try {
                 await deleteDoc(doc(db, "records", currentDeleteRecordId));
                 deleteModal.style.display = 'none';
+                alert("删除成功！");
             } catch (error) {
                 console.error("删除记录失败: ", error);
                 alert("删除记录失败");
             }
         });
 
-        // 表单输入实时预览
-        recordForm.addEventListener('input', function () {
-            previewDate.textContent = document.getElementById('recordDate').value || '未选择';
-            previewLine.textContent = document.getElementById('productionLine').value ? `${document.getElementById('productionLine').value}线` : '未选择';
-            previewModel.textContent = document.getElementById('productModel').value || '未填写';
-            previewRecorder.textContent = document.getElementById('recorder').value || '未填写';
-        });
+        // 添加排序和筛选的事件监听
+        sortField.addEventListener('change', updateRecordHistory);
+        sortOrder.addEventListener('change', updateRecordHistory);
+        filterLine.addEventListener('input', updateRecordHistory);
 
         // 初始化时获取记录
         fetchRecords();
-
-        // 添加排序和筛选的事件监听
-        document.getElementById('sortField').addEventListener('change', updateRecordHistory);
-        document.getElementById('sortOrder').addEventListener('change', updateRecordHistory);
-        document.getElementById('filterLine').addEventListener('change', updateRecordHistory);
     </script>
 </body>
-
 </html>
