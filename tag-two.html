@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>���Ӳ��߲���Ʒ��¼ϵͳ��ʵʱ�棩</title>
+    <title>定子产线不良品记录系统（实时版）</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- ���� Firebase SDK -->
+    <!-- 添加 Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
@@ -400,7 +400,7 @@
             font-size: 1.2rem;
         }
 
-        /* ��Ӧʽ��� */
+        /* 响应式设计 */
         @media (max-width: 768px) {
             header h1 {
                 font-size: 2.2rem;
@@ -442,7 +442,7 @@
             }
         }
 
-        /* ������ʽ */
+        /* 新增样式 */
         .btn-export {
             background: var(--purple);
             margin-top: 15px;
@@ -463,7 +463,7 @@
             font-size: 0.9rem;
         }
 
-        /* ���������ɸѡ��ʽ */
+        /* 新增排序和筛选样式 */
         .sort-controls {
             display: flex;
             flex-wrap: wrap;
@@ -572,7 +572,7 @@
             font-weight: 500;
         }
 
-        /* �۵�/չ������ */
+        /* 折叠/展开动画 */
         .collapsed .date-records {
             display: none;
         }
@@ -581,7 +581,7 @@
             transform: rotate(180deg);
         }
 
-        /* ѡ�񵼳���ʽ */
+        /* 选择导出样式 */
         .record-checkbox {
             margin-right: 10px;
         }
@@ -608,7 +608,7 @@
             background: #2e7d32;
         }
 
-        /* �ײ�����������ʽ */
+        /* 底部导出区域样式 */
         .export-section {
             margin-top: 25px;
             padding: 20px;
@@ -647,7 +647,7 @@
             margin-bottom: 10px;
         }
 
-        /* ɾ����¼��ť��ʽ */
+        /* 删除记录按钮样式 */
         .btn-delete {
             background: var(--danger);
             margin-left: 10px;
@@ -657,7 +657,7 @@
             background: #c53030;
         }
 
-        /* ��¼��������ʽ */
+        /* 记录操作区样式 */
         .record-actions {
             display: flex;
             justify-content: space-between;
@@ -667,7 +667,7 @@
             border-top: 1px solid #f1f3f4;
         }
 
-        /* ɾ��ȷ�϶Ի�����ʽ */
+        /* 删除确认对话框样式 */
         .delete-modal {
             display: none;
             position: fixed;
@@ -738,7 +738,7 @@
             gap: 10px;
         }
 
-        /* ����ɾ����ť��ʽ */
+        /* 批量删除按钮样式 */
         .btn-delete-selected {
             background: var(--danger);
             margin-top: 10px;
@@ -748,7 +748,7 @@
             background: #c53030;
         }
 
-        /* ͳ�ƿ�Ƭ�����Ż� */
+        /* 统计卡片布局优化 */
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -787,7 +787,7 @@
             font-size: 1rem;
         }
         
-        /* ʵʱ֪ͨ��ʽ */
+        /* 实时通知样式 */
         .realtime-notification {
             position: fixed;
             bottom: 20px;
@@ -836,195 +836,195 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-clipboard-list"></i> ���Ӳ��߲���Ʒ��¼ϵͳ</h1>
-            <p>׼ȷ��¼���߲���Ʒ���ݣ�������Ʒ����������Ľ���ʵʱЭ���棩</p>
+            <h1><i class="fas fa-clipboard-list"></i> 定子产线不良品记录系统</h1>
+            <p>准确记录产线不良品数据，助力产品质量分析与改进（实时协作版）</p>
         </header>
 
-        <!-- ʵʱ֪ͨ -->
+        <!-- 实时通知 -->
         <div class="realtime-notification" id="realtimeNotification">
             <i class="fas fa-sync-alt"></i>
-            <span id="notificationText">�¼�¼��ͬ��</span>
+            <span id="notificationText">新记录已同步</span>
             <div class="realtime-badge" id="notificationBadge">1</div>
         </div>
 
-        <!-- ͳ�ƿ�Ƭ -->
+        <!-- 统计卡片 -->
         <div class="stats-container">
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-industry"></i></div>
                 <div class="stat-value" id="totalRecords">0</div>
-                <div class="stat-label">�ܼ�¼��</div>
+                <div class="stat-label">总记录数</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
                 <div class="stat-value" id="totalDefectsStat">0</div>
-                <div class="stat-label">����Ʒ����</div>
+                <div class="stat-label">不良品总数</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-users"></i></div>
                 <div class="stat-value" id="activeUsers">1</div>
-                <div class="stat-label">��ǰ�û�</div>
+                <div class="stat-label">当前用户</div>
             </div>
         </div>
 
         <div class="instructions">
-            <h3><i class="fas fa-info-circle"></i> ��д˵��</h3>
+            <h3><i class="fas fa-info-circle"></i> 填写说明</h3>
             <ul>
-                <li>��׼ȷ��дÿ�ղ��߲���Ʒ���ݣ������ֶξ�Ϊ������</li>
-                <li>������ѡ��ʵ���������ڣ�������ѡ���Ӧ�Ĳ��߱��</li>
-                <li>�ͺ�����д�����Ĳ�Ʒ�ͺŴ���</li>
-                <li>��¼��Ա����д��¼����ʵ����</li>
-                <li><strong>�������ܣ�</strong>�����Ӷ��ֲ���Ʒ���ͼ�����������д�Ľ�����</li>
-                <li>��д��ɺ���"�ύ��¼"��ť��������</li>
-                <li><strong>�������ܣ�</strong>ϵͳ���Զ��ۻ������ύ�����ݣ�����ʱ����ΪExcel�ļ�</li>
-                <li><strong>�������ܣ�</strong>�����¼�����ڷ���չʾ��֧�������ѡ���Ե���</li>
-                <li><strong>�������ܣ�</strong>�ɵ���ɾ��������ɾ����¼����</li>
-                <li><strong style="color: var(--success);">ʵʱЭ����</strong>���м�¼ʵʱͬ�����ɼ�ʱ�鿴�����ύ������</li>
+                <li>请准确填写每日产线不良品数据，所有字段均为必填项</li>
+                <li>日期请选择实际生产日期，产线请选择对应的产线编号</li>
+                <li>型号请填写完整的产品型号代码</li>
+                <li>记录人员请填写记录者真实姓名</li>
+                <li><strong>新增功能：</strong>可添加多种不良品类型及数量，并填写改进建议</li>
+                <li>填写完成后点击"提交记录"按钮保存数据</li>
+                <li><strong>新增功能：</strong>系统会自动累积所有提交的数据，可随时导出为Excel文件</li>
+                <li><strong>新增功能：</strong>最近记录按日期分类展示，支持排序和选择性导出</li>
+                <li><strong>新增功能：</strong>可单独删除或批量删除记录数据</li>
+                <li><strong style="color: var(--success);">实时协作：</strong>所有记录实时同步，可即时查看他人提交的数据</li>
             </ul>
         </div>
 
         <div class="card">
             <div class="card-title">
                 <i class="fas fa-edit"></i>
-                <span>����Ʒ��¼����</span>
+                <span>不良品记录表单</span>
             </div>
 
             <form id="recordForm">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="recordDate"><i class="far fa-calendar-alt"></i> ��¼����</label>
+                        <label for="recordDate"><i class="far fa-calendar-alt"></i> 记录日期</label>
                         <input type="date" id="recordDate" class="form-control" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="productionLine"><i class="fas fa-industry"></i> ��������</label>
+                        <label for="productionLine"><i class="fas fa-industry"></i> 生产产线</label>
                         <select id="productionLine" class="form-control" required>
-                            <option value="">-- ��ѡ����� --</option>
-                            <option value="1">1��</option>
-                            <option value="2">2��</option>
-                            <option value="3">3��</option>
-                            <option value="4">4��</option>
-                            <option value="5">5��</option>
-                            <option value="6">6��</option>
-                            <option value="7">7��</option>
-                            <option value="8">8��</option>
-                            <option value="9">9��</option>
-                            <option value="10">10��</option>
-                            <option value="11">11��</option>
-                            <option value="12">12��</option>
-                            <option value="13">13��</option>
-                            <option value="14">14��</option>
-                            <option value="15">15��</option>
-                            <option value="16">16��</option>
-                            <option value="17">17��</option>
+                            <option value="">-- 请选择产线 --</option>
+                            <option value="1">1线</option>
+                            <option value="2">2线</option>
+                            <option value="3">3线</option>
+                            <option value="4">4线</option>
+                            <option value="5">5线</option>
+                            <option value="6">6线</option>
+                            <option value="7">7线</option>
+                            <option value="8">8线</option>
+                            <option value="9">9线</option>
+                            <option value="10">10线</option>
+                            <option value="11">11线</option>
+                            <option value="12">12线</option>
+                            <option value="13">13线</option>
+                            <option value="14">14线</option>
+                            <option value="15">15线</option>
+                            <option value="16">16线</option>
+                            <option value="17">17线</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="productModel"><i class="fas fa-barcode"></i> ��Ʒ�ͺ�</label>
-                        <input type="text" id="productModel" class="form-control" placeholder="�������Ʒ�ͺ�" required>
+                        <label for="productModel"><i class="fas fa-barcode"></i> 产品型号</label>
+                        <input type="text" id="productModel" class="form-control" placeholder="请输入产品型号" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="recorder"><i class="fas fa-user"></i> ��¼��Ա</label>
-                        <input type="text" id="recorder" class="form-control" placeholder="�������¼������" required>
+                        <label for="recorder"><i class="fas fa-user"></i> 记录人员</label>
+                        <input type="text" id="recorder" class="form-control" placeholder="请输入记录人姓名" required>
                     </div>
                 </div>
 
-                <!-- ����Ʒ��¼���� -->
+                <!-- 不良品记录区域 -->
                 <div class="defect-section">
                     <div class="defect-header">
                         <div class="defect-title">
-                            <i class="fas fa-exclamation-triangle"></i> ����Ʒ��¼
+                            <i class="fas fa-exclamation-triangle"></i> 不良品记录
                         </div>
                     </div>
 
                     <div class="defect-row">
                         <div class="form-group">
-                            <label for="defectType"><i class="fas fa-tag"></i> ����Ʒ����</label>
+                            <label for="defectType"><i class="fas fa-tag"></i> 不良品类型</label>
                             <select id="defectType" class="form-control">
-                                <option value="">-- ��ѡ������ --</option>
-                                <option value="���ȱ��">���ȱ��</option>
-                                <option value="�ߴ�ƫ��">�ߴ�ƫ��</option>
-                                <option value="��������">��������</option>
-                                <option value="��Ե����">��Ե����</option>
-                                <option value="��������">��������</option>
-                                <option value="���ܲ���">���ܲ���</option>
-                                <option value="��������">��������</option>
-                                <option value="��������">��������</option>
+                                <option value="">-- 请选择类型 --</option>
+                                <option value="外观缺陷">外观缺陷</option>
+                                <option value="尺寸偏差">尺寸偏差</option>
+                                <option value="材料问题">材料问题</option>
+                                <option value="绝缘不良">绝缘不良</option>
+                                <option value="焊接问题">焊接问题</option>
+                                <option value="性能不良">性能不良</option>
+                                <option value="绕线问题">绕线问题</option>
+                                <option value="其他问题">其他问题</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="defectQuantity"><i class="fas fa-hashtag"></i> ����Ʒ����</label>
+                            <label for="defectQuantity"><i class="fas fa-hashtag"></i> 不良品数量</label>
                             <input type="number" id="defectQuantity" class="form-control" min="1" value="1">
                         </div>
 
                         <div class="form-group">
                             <button type="button" id="addDefect" class="btn btn-add btn-sm">
-                                <i class="fas fa-plus"></i> ������Ŀ
+                                <i class="fas fa-plus"></i> 添加项目
                             </button>
                         </div>
                     </div>
 
                     <div class="defect-list" id="defectList">
                         <div class="defect-item">
-                            <div>����Ʒ����</div>
-                            <div>����</div>
-                            <div>����</div>
+                            <div>不良品类型</div>
+                            <div>数量</div>
+                            <div>操作</div>
                         </div>
-                        <div class="empty-state" id="emptyDefects">���޲���Ʒ��¼����������Ŀ</div>
+                        <div class="empty-state" id="emptyDefects">暂无不良品记录，请添加项目</div>
                     </div>
 
                     <div class="total-defects">
-                        �ܼƲ���Ʒ����: <span id="totalDefects">0</span> ��
+                        总计不良品数量: <span id="totalDefects">0</span> 件
                     </div>
                 </div>
 
-                <!-- ��ע�ͽ������� -->
+                <!-- 备注和建议区域 -->
                 <div class="remark-section">
                     <div class="form-group">
-                        <label for="remark"><i class="fas fa-comment"></i> ��ע��Ľ�����</label>
-                        <textarea id="remark" class="form-control" placeholder="�����벻��Ʒԭ��������Ľ�����"></textarea>
+                        <label for="remark"><i class="fas fa-comment"></i> 备注与改进建议</label>
+                        <textarea id="remark" class="form-control" placeholder="请输入不良品原因分析及改进建议"></textarea>
                     </div>
                 </div>
 
                 <div class="preview-section">
                     <div class="preview-title">
-                        <i class="fas fa-eye"></i> ����Ԥ��
+                        <i class="fas fa-eye"></i> 数据预览
                     </div>
                     <div class="preview-grid">
                         <div class="preview-item">
-                            <div class="preview-label">��¼����</div>
-                            <div class="preview-value" id="previewDate">δѡ��</div>
+                            <div class="preview-label">记录日期</div>
+                            <div class="preview-value" id="previewDate">未选择</div>
                         </div>
                         <div class="preview-item">
-                            <div class="preview-label">��������</div>
-                            <div class="preview-value" id="previewLine">δѡ��</div>
+                            <div class="preview-label">生产产线</div>
+                            <div class="preview-value" id="previewLine">未选择</div>
                         </div>
                         <div class="preview-item">
-                            <div class="preview-label">��Ʒ�ͺ�</div>
-                            <div class="preview-value" id="previewModel">δ��д</div>
+                            <div class="preview-label">产品型号</div>
+                            <div class="preview-value" id="previewModel">未填写</div>
                         </div>
                         <div class="preview-item">
-                            <div class="preview-label">��¼��Ա</div>
-                            <div class="preview-value" id="previewRecorder">δ��д</div>
+                            <div class="preview-label">记录人员</div>
+                            <div class="preview-value" id="previewRecorder">未填写</div>
                         </div>
                         <div class="preview-item">
-                            <div class="preview-label">����Ʒ����</div>
+                            <div class="preview-label">不良品总数</div>
                             <div class="preview-value" id="previewTotalDefects">0</div>
                         </div>
                         <div class="preview-item">
-                            <div class="preview-label">����Ʒ����</div>
-                            <div class="preview-value" id="previewDefectTypes">��</div>
+                            <div class="preview-label">不良品类型</div>
+                            <div class="preview-value" id="previewDefectTypes">无</div>
                         </div>
                     </div>
                 </div>
 
                 <button type="submit" class="btn btn-block">
-                    <i class="fas fa-paper-plane"></i> �ύ��¼
+                    <i class="fas fa-paper-plane"></i> 提交记录
                 </button>
                 <button type="reset" class="btn btn-block btn-reset">
-                    <i class="fas fa-redo"></i> ���ñ���
+                    <i class="fas fa-redo"></i> 重置表单
                 </button>
             </form>
         </div>
@@ -1032,135 +1032,135 @@
         <div class="card record-history">
             <div class="card-title">
                 <i class="fas fa-history"></i>
-                <span>�����¼</span>
+                <span>最近记录</span>
                 <span style="font-size: 0.9rem; color: var(--success); margin-left: 15px;" id="realtimeStatus">
-                    <i class="fas fa-circle"></i> ʵʱͬ����
+                    <i class="fas fa-circle"></i> 实时同步中
                 </span>
             </div>
 
-            <!-- �����ɸѡ�ؼ� -->
+            <!-- 排序和筛选控件 -->
             <div class="sort-controls">
                 <div>
-                    <label for="sortField" class="mr-2">�����ֶΣ�</label>
+                    <label for="sortField" class="mr-2">排序字段：</label>
                     <select id="sortField" class="sort-select">
-                        <option value="date">��¼����</option>
-                        <option value="line">��������</option>
-                        <option value="defects">����Ʒ����</option>
-                        <option value="timestamp">�ύʱ��</option>
+                        <option value="date">记录日期</option>
+                        <option value="line">生产产线</option>
+                        <option value="defects">不良品数量</option>
+                        <option value="timestamp">提交时间</option>
                     </select>
                 </div>
                 <div>
-                    <label for="sortOrder" class="mr-2">����ʽ��</label>
+                    <label for="sortOrder" class="mr-2">排序方式：</label>
                     <select id="sortOrder" class="sort-select">
-                        <option value="desc">����</option>
-                        <option value="asc">����</option>
+                        <option value="desc">降序</option>
+                        <option value="asc">升序</option>
                     </select>
                 </div>
                 <div>
-                    <label for="filterLine" class="mr-2">����ɸѡ��</label>
+                    <label for="filterLine" class="mr-2">产线筛选：</label>
                     <select id="filterLine" class="sort-select">
-                        <option value="">ȫ������</option>
-                        <option value="1">1��</option>
-                        <option value="2">2��</option>
-                        <option value="3">3��</option>
-                        <option value="4">4��</option>
-                        <option value="5">5��</option>
-                        <option value="6">6��</option>
-                        <option value="7">7��</option>
-                        <option value="8">8��</option>
-                        <option value="9">9��</option>
-                        <option value="10">10��</option>
-                        <option value="11">11��</option>
-                        <option value="12">12��</option>
-                        <option value="13">13��</option>
-                        <option value="14">14��</option>
-                        <option value="15">15��</option>
-                        <option value="16">16��</option>
-                        <option value="17">17��</option>
+                        <option value="">全部产线</option>
+                        <option value="1">1线</option>
+                        <option value="2">2线</option>
+                        <option value="3">3线</option>
+                        <option value="4">4线</option>
+                        <option value="5">5线</option>
+                        <option value="6">6线</option>
+                        <option value="7">7线</option>
+                        <option value="8">8线</option>
+                        <option value="9">9线</option>
+                        <option value="10">10线</option>
+                        <option value="11">11线</option>
+                        <option value="12">12线</option>
+                        <option value="13">13线</option>
+                        <option value="14">14线</option>
+                        <option value="15">15线</option>
+                        <option value="16">16线</option>
+                        <option value="17">17线</option>
                     </select>
                 </div>
             </div>
 
-            <!-- ȫѡ���� -->
+            <!-- 全选控制 -->
             <div class="select-all-container">
                 <input type="checkbox" id="selectAllRecords" class="record-checkbox">
-                <label for="selectAllRecords" class="select-all-label">ȫѡ��¼</label>
+                <label for="selectAllRecords" class="select-all-label">全选记录</label>
             </div>
 
             <div id="recordHistory">
                 <div style="text-align: center; padding: 30px;">
                     <i class="fas fa-database" style="font-size: 3rem; color: #dadce0; margin-bottom: 15px;"></i>
-                    <p style="color: var(--secondary);">���ڼ��ؼ�¼����...</p>
+                    <p style="color: var(--secondary);">正在加载记录数据...</p>
                 </div>
             </div>
 
-            <!-- ѡ�м�¼ͳ�� -->
+            <!-- 选中记录统计 -->
             <div class="selected-records">
-                <p>��ѡ�� <span id="selectedCount" class="selected-count">0</span> ����¼</p>
+                <p>已选择 <span id="selectedCount" class="selected-count">0</span> 条记录</p>
             </div>
 
-            <!-- ����ɾ����ť -->
+            <!-- 批量删除按钮 -->
             <button type="button" id="deleteSelectedRecords" class="btn btn-block btn-delete-selected" disabled>
-                <i class="fas fa-trash"></i> ɾ��ѡ�м�¼
+                <i class="fas fa-trash"></i> 删除选中记录
             </button>
 
             <div class="record-count">
-                <span id="recordCount">���ڼ�������...</span>
+                <span id="recordCount">正在加载数据...</span>
             </div>
         </div>
 
-        <!-- �������� -->
+        <!-- 导出区域 -->
         <div class="card export-section">
             <div class="export-title">
                 <i class="fas fa-file-excel"></i>
-                <span>���ݵ���</span>
+                <span>数据导出</span>
             </div>
 
             <button type="button" id="exportAllRecords" class="btn btn-block btn-export">
-                <i class="fas fa-file-excel"></i> �������м�¼
+                <i class="fas fa-file-excel"></i> 导出所有记录
             </button>
 
             <button type="button" id="exportSelectedRecords" class="btn btn-block btn-export-selected">
-                <i class="fas fa-file-excel"></i> ����ѡ�м�¼
+                <i class="fas fa-file-excel"></i> 导出选中记录
             </button>
 
             <div class="export-instructions">
-                <h4><i class="fas fa-info-circle"></i> ����˵��</h4>
+                <h4><i class="fas fa-info-circle"></i> 导出说明</h4>
                 <ul>
-                    <li>���"�������м�¼"������ϵͳ�����еĲ���Ʒ��¼����</li>
-                    <li>���"����ѡ�м�¼"��ֻ��������ѡ�ļ�¼����</li>
-                    <li>���������ݸ�ʽΪExcel�ļ�����ֱ��ʹ��Excel��WPS��������</li>
-                    <li>������Excel�ļ����������Ĳ���Ʒ��¼��Ϣ���������ݷ����ͱ�������</li>
+                    <li>点击"导出所有记录"将导出系统中所有的不良品记录数据</li>
+                    <li>点击"导出选中记录"将只导出您勾选的记录数据</li>
+                    <li>导出的数据格式为Excel文件，可直接使用Excel或WPS等软件打开</li>
+                    <li>导出的Excel文件包含完整的不良品记录信息，便于数据分析和报告生成</li>
                 </ul>
             </div>
         </div>
 
         <footer>
-            <div class="logo">���Ӳ�����������ϵͳ</div>
-            <p>? 2023 �������칫�� | ȷ����Ʒ��������������Ч�� | ʵʱЭ���汾</p>
+            <div class="logo">定子产线质量管理系统</div>
+            <p>© 2023 管培生办公室 | 确保产品质量，提升生产效率 | 实时协作版本</p>
         </footer>
     </div>
 
-    <!-- ɾ��ȷ�϶Ի��� -->
+    <!-- 删除确认对话框 -->
     <div id="deleteModal" class="delete-modal">
         <div class="delete-modal-content">
             <div class="delete-modal-header">
-                <span class="delete-modal-title">ȷ��ɾ��</span>
+                <span class="delete-modal-title">确认删除</span>
                 <span id="deleteModalClose" class="delete-modal-close">&times;</span>
             </div>
             <div class="delete-modal-message">
-                <p>��ȷ��Ҫɾ��������¼��</p>
-                <p class="text-danger">�˲������ɳ�����</p>
+                <p>您确定要删除这条记录吗？</p>
+                <p class="text-danger">此操作不可撤销！</p>
             </div>
             <div class="delete-modal-actions">
-                <button type="button" id="confirmDelete" class="btn btn-danger">ȷ��ɾ��</button>
-                <button type="button" id="cancelDelete" class="btn btn-secondary">ȡ��</button>
+                <button type="button" id="confirmDelete" class="btn btn-danger">确认删除</button>
+                <button type="button" id="cancelDelete" class="btn btn-secondary">取消</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Firebase����
+        // Firebase配置
         const firebaseConfig = {
             apiKey: "AIzaSyB0tYV1c4F5FjPmYb2xZzFJ8V9Jv2DkKXw",
             authDomain: "defect-record-system.firebaseapp.com",
@@ -1170,12 +1170,12 @@
             appId: "1:123456789012:web:abcdef1234567890abcdef"
         };
 
-        // ��ʼ��Firebase
+        // 初始化Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const defectRecordsRef = db.collection("defectRecords");
 
-        // ��ȡ���б�Ҫ�� DOM Ԫ��
+        // 获取所有必要的 DOM 元素
         const recordForm = document.getElementById('recordForm');
         const defectList = document.getElementById('defectList');
         const emptyDefects = document.getElementById('emptyDefects');
@@ -1206,18 +1206,18 @@
         const realtimeStatus = document.getElementById('realtimeStatus');
         const activeUsers = document.getElementById('activeUsers');
 
-        // �洢���м�¼
+        // 存储所有记录
         let records = [];
         let currentDeleteRecordId;
         let newRecordsCount = 0;
         let notificationTimeout;
         let userCount = 0;
 
-        // ��������û���
-        const recorderName = "�û�" + Math.floor(Math.random() * 1000);
+        // 生成随机用户名
+        const recorderName = "用户" + Math.floor(Math.random() * 1000);
         document.getElementById('recorder').value = recorderName;
         
-        // ���������û���
+        // 监听在线用户数
         function setupPresence() {
             const presenceRef = db.ref('presence');
             const userRef = presenceRef.push();
@@ -1231,27 +1231,27 @@
             });
         }
 
-        // ��ʾʵʱ֪ͨ
+        // 显示实时通知
         function showNotification(message, count) {
             notificationText.textContent = message;
             notificationBadge.textContent = count;
             
-            // ���֮ǰ�ĳ�ʱ
+            // 清除之前的超时
             if (notificationTimeout) {
                 clearTimeout(notificationTimeout);
             }
             
-            // ��ʾ֪ͨ
+            // 显示通知
             realtimeNotification.classList.add('show');
             
-            // 3�������֪ͨ
+            // 3秒后隐藏通知
             notificationTimeout = setTimeout(() => {
                 realtimeNotification.classList.remove('show');
                 newRecordsCount = 0;
             }, 3000);
         }
 
-        // ���Ӳ���Ʒ��Ŀ
+        // 添加不良品项目
         addDefect.addEventListener('click', function () {
             const defectType = document.getElementById('defectType');
             const defectQuantity = document.getElementById('defectQuantity');
@@ -1264,7 +1264,7 @@
                     <div>${defectQuantity.value}</div>
                     <div>
                         <button type="button" class="btn btn-remove btn-sm">
-                            <i class="fas fa-trash"></i> ɾ��
+                            <i class="fas fa-trash"></i> 删除
                         </button>
                     </div>
                 `;
@@ -1272,7 +1272,7 @@
                 defectList.appendChild(newDefect);
                 emptyDefects.style.display = 'none';
 
-                // �����ܲ���Ʒ����
+                // 计算总不良品数量
                 let total = 0;
                 const defectItems = defectList.querySelectorAll('.defect-item:not(:first-child)');
                 defectItems.forEach(item => {
@@ -1281,14 +1281,14 @@
                 totalDefects.textContent = total;
                 previewTotalDefects.textContent = total;
 
-                // ����Ԥ���Ĳ���Ʒ����
+                // 更新预览的不良品类型
                 const defectTypes = [];
                 defectItems.forEach(item => {
                     defectTypes.push(item.children[0].textContent);
                 });
                 previewDefectTypes.textContent = defectTypes.join(', ');
 
-                // ��ɾ����ť�¼�
+                // 绑定删除按钮事件
                 const removeButton = newDefect.querySelector('.btn-remove');
                 removeButton.addEventListener('click', function () {
                     newDefect.remove();
@@ -1296,7 +1296,7 @@
                         emptyDefects.style.display = 'block';
                     }
 
-                    // ���¼����ܲ���Ʒ����
+                    // 重新计算总不良品数量
                     let newTotal = 0;
                     const newDefectItems = defectList.querySelectorAll('.defect-item:not(:first-child)');
                     newDefectItems.forEach(item => {
@@ -1305,17 +1305,17 @@
                     totalDefects.textContent = newTotal;
                     previewTotalDefects.textContent = newTotal;
 
-                    // ����Ԥ���Ĳ���Ʒ����
+                    // 更新预览的不良品类型
                     const newDefectTypes = [];
                     newDefectItems.forEach(item => {
                         newDefectTypes.push(item.children[0].textContent);
                     });
-                    previewDefectTypes.textContent = newDefectTypes.join(', ') || '��';
+                    previewDefectTypes.textContent = newDefectTypes.join(', ') || '无';
                 });
             }
         });
 
-        // �ύ��¼
+        // 提交记录
         recordForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
@@ -1346,42 +1346,42 @@
                 timestamp: new Date().getTime()
             };
 
-            // ���ӵ�Firestore
+            // 添加到Firestore
             defectRecordsRef.add(newRecord)
                 .then(() => {
-                    // �ɹ����Ӻ����ñ���
+                    // 成功添加后重置表单
                     recordForm.reset();
                     document.getElementById('recorder').value = recorderName;
                     
-                    // ���ò���Ʒ�б�
+                    // 重置不良品列表
                     defectList.innerHTML = `
                         <div class="defect-item">
-                            <div>����Ʒ����</div>
-                            <div>����</div>
-                            <div>����</div>
+                            <div>不良品类型</div>
+                            <div>数量</div>
+                            <div>操作</div>
                         </div>
-                        <div class="empty-state" id="emptyDefects">���޲���Ʒ��¼����������Ŀ</div>
+                        <div class="empty-state" id="emptyDefects">暂无不良品记录，请添加项目</div>
                     `;
                     totalDefects.textContent = 0;
                     
-                    // ����Ԥ��
-                    previewDate.textContent = 'δѡ��';
-                    previewLine.textContent = 'δѡ��';
-                    previewModel.textContent = 'δ��д';
+                    // 重置预览
+                    previewDate.textContent = '未选择';
+                    previewLine.textContent = '未选择';
+                    previewModel.textContent = '未填写';
                     previewRecorder.textContent = recorderName;
                     previewTotalDefects.textContent = 0;
-                    previewDefectTypes.textContent = '��';
+                    previewDefectTypes.textContent = '无';
                     
-                    // ��ʾ�ɹ���Ϣ
-                    showNotification("���ļ�¼���ύ�ɹ���", 0);
+                    // 显示成功消息
+                    showNotification("您的记录已提交成功！", 0);
                 })
                 .catch(error => {
-                    console.error("���Ӽ�¼ʧ��: ", error);
-                    showNotification("�ύʧ�ܣ������ԣ�", 0);
+                    console.error("添加记录失败: ", error);
+                    showNotification("提交失败，请重试！", 0);
                 });
         });
 
-        // ��Firestore��ȡ��¼
+        // 从Firestore获取记录
         function loadRecords() {
             defectRecordsRef.orderBy("timestamp", "desc").get()
                 .then((querySnapshot) => {
@@ -1396,12 +1396,12 @@
                     updateStats();
                 })
                 .catch((error) => {
-                    console.error("��ȡ��¼ʧ��: ", error);
-                    recordHistory.innerHTML = `<div class="empty-state">���ؼ�¼ʧ�ܣ���ˢ��ҳ������</div>`;
+                    console.error("获取记录失败: ", error);
+                    recordHistory.innerHTML = `<div class="empty-state">加载记录失败，请刷新页面重试</div>`;
                 });
         }
 
-        // ʵʱ������¼�仯
+        // 实时监听记录变化
         function setupRealtimeListener() {
             defectRecordsRef.orderBy("timestamp", "desc").onSnapshot((snapshot) => {
                 let hasNewRecords = false;
@@ -1411,13 +1411,13 @@
                         const record = change.doc.data();
                         record.id = change.doc.id;
                         
-                        // ����Ƿ�Ϊ�¼�¼���ǳ�ʼ���أ�
+                        // 检查是否为新记录（非初始加载）
                         if (records.length > 0 && !records.some(r => r.id === record.id)) {
                             hasNewRecords = true;
                             newRecordsCount++;
                         }
                         
-                        // ���±��ؼ�¼����
+                        // 更新本地记录数组
                         const existingIndex = records.findIndex(r => r.id === record.id);
                         if (existingIndex === -1) {
                             records.push(record);
@@ -1445,30 +1445,30 @@
                     }
                 });
                 
-                // ����UI
+                // 更新UI
                 updateRecordHistory();
                 updateStats();
                 
-                // ��ʾ�¼�¼֪ͨ
+                // 显示新记录通知
                 if (hasNewRecords) {
-                    showNotification("���µĲ���Ʒ��¼�ύ", newRecordsCount);
+                    showNotification("有新的不良品记录提交", newRecordsCount);
                 }
             }, (error) => {
-                console.error("ʵʱ����ʧ��: ", error);
-                realtimeStatus.innerHTML = `<i class="fas fa-circle" style="color:var(--danger)"></i> ���ӶϿ�`;
+                console.error("实时监听失败: ", error);
+                realtimeStatus.innerHTML = `<i class="fas fa-circle" style="color:var(--danger)"></i> 连接断开`;
             });
         }
 
-        // ���¼�¼��ʷ
+        // 更新记录历史
         function updateRecordHistory() {
             if (records.length === 0) {
                 recordHistory.innerHTML = `
                     <div style="text-align: center; padding: 30px;">
                         <i class="fas fa-database" style="font-size: 3rem; color: #dadce0; margin-bottom: 15px;"></i>
-                        <p style="color: var(--secondary);">���޼�¼����</p>
+                        <p style="color: var(--secondary);">暂无记录数据</p>
                     </div>
                 `;
-                recordCount.textContent = "�ѱ��� 0 ����¼";
+                recordCount.textContent = "已保存 0 条记录";
                 return;
             }
 
@@ -1497,30 +1497,30 @@
                             <div class="record-item">
                                 <input type="checkbox" class="record-checkbox" data-id="${record.id}">
                                 <div class="record-header">
-                                    <h4>��������: ${record.line}��</h4>
-                                    <span class="record-time">�ύʱ��: ${new Date(record.timestamp).toLocaleString()}</span>
+                                    <h4>生产产线: ${record.line}线</h4>
+                                    <span class="record-time">提交时间: ${new Date(record.timestamp).toLocaleString()}</span>
                                 </div>
                                 <div class="record-preview-grid">
                                     <div class="record-preview-item">
-                                        <div class="record-preview-label">��Ʒ�ͺ�</div>
+                                        <div class="record-preview-label">产品型号</div>
                                         <div class="record-preview-value">${record.model}</div>
                                     </div>
                                     <div class="record-preview-item">
-                                        <div class="record-preview-label">��¼��Ա</div>
+                                        <div class="record-preview-label">记录人员</div>
                                         <div class="record-preview-value">${record.recorder}</div>
                                     </div>
                                     <div class="record-preview-item">
-                                        <div class="record-preview-label">����Ʒ����</div>
+                                        <div class="record-preview-label">不良品总数</div>
                                         <div class="record-preview-value">${record.totalDefects}</div>
                                     </div>
                                     <div class="record-preview-item">
-                                        <div class="record-preview-label">����Ʒ����</div>
+                                        <div class="record-preview-label">不良品类型</div>
                                         <div class="record-preview-value">${record.defects.map(defect => defect.type).join(', ')}</div>
                                     </div>
                                 </div>
                                 <div class="record-actions">
                                     <button type="button" class="btn btn-delete btn-sm" data-id="${record.id}">
-                                        <i class="fas fa-trash"></i> ɾ��
+                                        <i class="fas fa-trash"></i> 删除
                                     </button>
                                 </div>
                             </div>
@@ -1530,13 +1530,13 @@
 
                 recordHistory.appendChild(dateGroup);
 
-                // ���۵�/չ���¼�
+                // 绑定折叠/展开事件
                 const dateHeader = dateGroup.querySelector('.date-header');
                 dateHeader.addEventListener('click', function () {
                     dateGroup.classList.toggle('collapsed');
                 });
 
-                // �󶨵���ɾ����ť�¼�
+                // 绑定单个删除按钮事件
                 const deleteButtons = dateGroup.querySelectorAll('.btn-delete');
                 deleteButtons.forEach(button => {
                     button.addEventListener('click', function () {
@@ -1546,7 +1546,7 @@
                 });
             }
 
-            // ��ȫѡ/��ѡ�¼�
+            // 绑定全选/反选事件
             selectAllRecords.addEventListener('change', function () {
                 const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
                 checkboxes.forEach(checkbox => {
@@ -1555,7 +1555,7 @@
                 updateSelectedCount();
             });
 
-            // �󶨵�����ѡ���¼�
+            // 绑定单个复选框事件
             const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
@@ -1563,10 +1563,10 @@
                 });
             });
 
-            recordCount.textContent = `�ѱ��� ${filteredRecords.length} ����¼`;
+            recordCount.textContent = `已保存 ${filteredRecords.length} 条记录`;
         }
 
-        // ����ͳ����Ϣ
+        // 更新统计信息
         function updateStats() {
             totalRecords.textContent = records.length;
             let totalDefectsSum = 0;
@@ -1576,7 +1576,7 @@
             totalDefectsStat.textContent = totalDefectsSum;
         }
 
-        // �����¼
+        // 排序记录
         function sortRecords(records) {
             const sortField = document.getElementById('sortField').value;
             const sortOrder = document.getElementById('sortOrder').value;
@@ -1610,7 +1610,7 @@
             });
         }
 
-        // ɸѡ��¼
+        // 筛选记录
         function filterRecords(records) {
             const filterLine = document.getElementById('filterLine').value;
             if (filterLine) {
@@ -1619,7 +1619,7 @@
             return records;
         }
 
-        // ����ѡ�м�¼����
+        // 更新选中记录数量
         function updateSelectedCount() {
             const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
             let count = 0;
@@ -1632,25 +1632,25 @@
             deleteSelectedRecords.disabled = count === 0;
         }
 
-        // �������м�¼
+        // 导出所有记录
         exportAllRecords.addEventListener('click', function () {
             const ws = XLSX.utils.json_to_sheet(records.map(r => ({
-                "��¼����": r.date,
-                "��������": r.line + "��",
-                "��Ʒ�ͺ�": r.model,
-                "��¼��Ա": r.recorder,
-                "����Ʒ����": r.totalDefects,
-                "����Ʒ����": r.defects.map(d => d.type).join(', '),
-                "��ע": r.remark,
-                "�ύʱ��": new Date(r.timestamp).toLocaleString()
+                "记录日期": r.date,
+                "生产产线": r.line + "线",
+                "产品型号": r.model,
+                "记录人员": r.recorder,
+                "不良品总数": r.totalDefects,
+                "不良品类型": r.defects.map(d => d.type).join(', '),
+                "备注": r.remark,
+                "提交时间": new Date(r.timestamp).toLocaleString()
             })));
             
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, '����Ʒ��¼');
-            XLSX.writeFile(wb, '����Ʒ��¼_���м�¼.xlsx');
+            XLSX.utils.book_append_sheet(wb, ws, '不良品记录');
+            XLSX.writeFile(wb, '不良品记录_所有记录.xlsx');
         });
 
-        // ����ѡ�м�¼
+        // 导出选中记录
         exportSelectedRecords.addEventListener('click', function () {
             const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
             const selectedRecords = [];
@@ -1660,14 +1660,14 @@
                     const record = records.find(r => r.id === recordId);
                     if (record) {
                         selectedRecords.push({
-                            "��¼����": record.date,
-                            "��������": record.line + "��",
-                            "��Ʒ�ͺ�": record.model,
-                            "��¼��Ա": record.recorder,
-                            "����Ʒ����": record.totalDefects,
-                            "����Ʒ����": record.defects.map(d => d.type).join(', '),
-                            "��ע": record.remark,
-                            "�ύʱ��": new Date(record.timestamp).toLocaleString()
+                            "记录日期": record.date,
+                            "生产产线": record.line + "线",
+                            "产品型号": record.model,
+                            "记录人员": record.recorder,
+                            "不良品总数": record.totalDefects,
+                            "不良品类型": record.defects.map(d => d.type).join(', '),
+                            "备注": record.remark,
+                            "提交时间": new Date(record.timestamp).toLocaleString()
                         });
                     }
                 }
@@ -1676,14 +1676,14 @@
             if (selectedRecords.length > 0) {
                 const ws = XLSX.utils.json_to_sheet(selectedRecords);
                 const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, '����Ʒ��¼');
-                XLSX.writeFile(wb, '����Ʒ��¼_ѡ�м�¼.xlsx');
+                XLSX.utils.book_append_sheet(wb, ws, '不良品记录');
+                XLSX.writeFile(wb, '不良品记录_选中记录.xlsx');
             } else {
-                showNotification("��ѡ��Ҫ�����ļ�¼", 0);
+                showNotification("请选择要导出的记录", 0);
             }
         });
 
-        // ����ɾ��ѡ�м�¼
+        // 批量删除选中记录
         deleteSelectedRecords.addEventListener('click', function () {
             const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
             const selectedIds = [];
@@ -1695,7 +1695,7 @@
 
             if (selectedIds.length === 0) return;
 
-            // ����ɾ��
+            // 批量删除
             const batch = db.batch();
             selectedIds.forEach(id => {
                 const docRef = defectRecordsRef.doc(id);
@@ -1704,18 +1704,18 @@
 
             batch.commit()
                 .then(() => {
-                    // �ɹ���ʵʱ��������¼�¼
+                    // 成功，实时监听会更新记录
                     selectAllRecords.checked = false;
                     updateSelectedCount();
-                    showNotification("��ɾ��ѡ�м�¼", selectedIds.length);
+                    showNotification("已删除选中记录", selectedIds.length);
                 })
                 .catch(error => {
-                    console.error("����ɾ��ʧ��: ", error);
-                    showNotification("ɾ��ʧ�ܣ������ԣ�", 0);
+                    console.error("批量删除失败: ", error);
+                    showNotification("删除失败，请重试！", 0);
                 });
         });
 
-        // �ر�ɾ��ȷ�϶Ի���
+        // 关闭删除确认对话框
         deleteModalClose.addEventListener('click', function () {
             deleteModal.style.display = 'none';
         });
@@ -1724,39 +1724,39 @@
             deleteModal.style.display = 'none';
         });
 
-        // ȷ��ɾ��������¼
+        // 确认删除单条记录
         confirmDelete.addEventListener('click', function () {
             defectRecordsRef.doc(currentDeleteRecordId).delete()
                 .then(() => {
                     deleteModal.style.display = 'none';
-                    showNotification("��¼��ɾ��", 1);
+                    showNotification("记录已删除", 1);
                 })
                 .catch(error => {
-                    console.error("ɾ����¼ʧ��: ", error);
+                    console.error("删除记录失败: ", error);
                     deleteModal.style.display = 'none';
-                    showNotification("ɾ��ʧ�ܣ������ԣ�", 0);
+                    showNotification("删除失败，请重试！", 0);
                 });
         });
 
-        // ��������ʵʱԤ��
+        // 表单输入实时预览
         recordForm.addEventListener('input', function () {
-            previewDate.textContent = document.getElementById('recordDate').value || 'δѡ��';
-            previewLine.textContent = document.getElementById('productionLine').value ? `${document.getElementById('productionLine').value}��` : 'δѡ��';
-            previewModel.textContent = document.getElementById('productModel').value || 'δ��д';
-            previewRecorder.textContent = document.getElementById('recorder').value || 'δ��д';
+            previewDate.textContent = document.getElementById('recordDate').value || '未选择';
+            previewLine.textContent = document.getElementById('productionLine').value ? `${document.getElementById('productionLine').value}线` : '未选择';
+            previewModel.textContent = document.getElementById('productModel').value || '未填写';
+            previewRecorder.textContent = document.getElementById('recorder').value || '未填写';
         });
 
-        // �����ɸѡ�仯ʱ���¼�¼��ʷ
+        // 排序和筛选变化时更新记录历史
         document.getElementById('sortField').addEventListener('change', updateRecordHistory);
         document.getElementById('sortOrder').addEventListener('change', updateRecordHistory);
         document.getElementById('filterLine').addEventListener('change', updateRecordHistory);
 
-        // ��ʼ��
+        // 初始化
         setupPresence();
         setupRealtimeListener();
         loadRecords();
         
-        // ����Ĭ������Ϊ����
+        // 设置默认日期为今天
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('recordDate').value = today;
         previewDate.textContent = today;
