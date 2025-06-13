@@ -8,7 +8,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-auth-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -29,6 +28,9 @@
             --gray: #dadce0;
             --purple: #673ab7;
             --teal: #008080;
+            --industrial-blue: #005b9f;
+            --industrial-orange: #ff6b35;
+            --industrial-green: #4caf50;
         }
 
         body {
@@ -47,58 +49,40 @@
         header {
             text-align: center;
             padding: 30px 0;
-            margin-bottom: 30px;
-            perspective: 1000px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .header-content {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 2;
         }
 
         header h1 {
             font-size: 2.8rem;
-            background: linear-gradient(135deg, #1a73e8 0%, #0d5cb6 100%);
+            background: linear-gradient(135deg, var(--industrial-blue) 0%, var(--primary) 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             margin-bottom: 10px;
-            text-shadow: 0 4px 8px rgba(26, 115, 232, 0.2);
             position: relative;
             display: inline-block;
-            transform-style: preserve-3d;
-            transition: transform 0.5s ease;
-        }
-
-        header h1:hover {
-            transform: translateY(-5px) rotateX(5deg);
-        }
-
-        header h1::after {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            height: 5px;
-            background: linear-gradient(90deg, #1a73e8, #5f6368);
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         header h1 i {
             margin-right: 15px;
             font-size: 1.8rem;
-            color: #1a73e8;
-            transform: translateZ(20px);
+            color: var(--industrial-blue);
             animation: float 3s ease-in-out infinite;
         }
 
         @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0) translateZ(20px);
-            }
-
-            50% {
-                transform: translateY(-8px) translateZ(20px);
-            }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         header p {
@@ -106,7 +90,6 @@
             font-size: 1.1rem;
             max-width: 700px;
             margin: 25px auto 0;
-            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
         }
 
         .card {
@@ -116,6 +99,18 @@
             padding: 30px;
             margin-bottom: 30px;
             transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--industrial-blue), var(--industrial-green));
         }
 
         .card:hover {
@@ -126,7 +121,7 @@
         .card-title {
             display: flex;
             align-items: center;
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
             font-size: 1.4rem;
             margin-bottom: 25px;
             padding-bottom: 15px;
@@ -136,6 +131,7 @@
         .card-title i {
             margin-right: 12px;
             font-size: 1.6rem;
+            color: var(--industrial-blue);
         }
 
         .form-grid {
@@ -183,7 +179,7 @@
         .btn {
             display: inline-block;
             padding: 14px 32px;
-            background: var(--primary);
+            background: var(--industrial-blue);
             color: white;
             border: none;
             border-radius: 8px;
@@ -191,13 +187,13 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(26, 115, 232, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .btn:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 6px 10px rgba(26, 115, 232, 0.3);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
         }
 
         .btn-block {
@@ -224,7 +220,7 @@
         }
 
         .btn-add {
-            background: var(--success);
+            background: var(--industrial-green);
             margin-top: 10px;
         }
 
@@ -237,11 +233,12 @@
             border-radius: 8px;
             padding: 20px;
             margin-top: 25px;
+            border: 1px solid #e0e0e0;
         }
 
         .preview-title {
             font-size: 1.2rem;
-            color: var(--primary);
+            color: var(--industrial-blue);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -261,7 +258,7 @@
             background: white;
             padding: 15px;
             border-radius: 8px;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--industrial-blue);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
@@ -279,14 +276,14 @@
 
         .instructions {
             background: #e8f0fe;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--industrial-blue);
             padding: 15px 20px;
             border-radius: 0 8px 8px 0;
             margin: 25px 0;
         }
 
         .instructions h3 {
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -310,6 +307,7 @@
             padding: 20px;
             background: #f8f9fa;
             border-radius: 8px;
+            border: 1px solid #e0e0e0;
         }
 
         .defect-header {
@@ -321,7 +319,7 @@
 
         .defect-title {
             font-size: 1.2rem;
-            color: var(--primary);
+            color: var(--industrial-blue);
             display: flex;
             align-items: center;
         }
@@ -366,7 +364,7 @@
             margin-top: 15px;
             font-weight: bold;
             font-size: 1.1rem;
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
         }
 
         textarea {
@@ -395,7 +393,7 @@
 
         .logo {
             font-weight: 700;
-            color: var(--primary);
+            color: var(--industrial-blue);
             margin-bottom: 10px;
             font-size: 1.2rem;
         }
@@ -487,7 +485,7 @@
             padding: 12px 15px;
             border-radius: 8px 8px 0 0;
             font-weight: bold;
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -528,7 +526,7 @@
         }
 
         .record-header h4 {
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
         }
 
         .record-time {
@@ -546,6 +544,7 @@
             padding: 8px;
             background: #f8f9fa;
             border-radius: 6px;
+            border: 1px solid #e0e0e0;
         }
 
         .record-preview-label {
@@ -596,7 +595,7 @@
 
         .selected-count {
             font-weight: bold;
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
         }
 
         .btn-export-selected {
@@ -619,7 +618,7 @@
 
         .export-title {
             font-size: 1.2rem;
-            color: var(--primary);
+            color: var(--industrial-blue);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -634,11 +633,11 @@
             padding: 12px;
             background: #e8f0fe;
             border-radius: 8px;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--industrial-blue);
         }
 
         .export-instructions h4 {
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
             margin-bottom: 8px;
         }
 
@@ -763,6 +762,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
             text-align: center;
             transition: transform 0.3s;
+            border-left: 4px solid var(--industrial-blue);
         }
 
         .stat-card:hover {
@@ -772,13 +772,13 @@
         .stat-icon {
             font-size: 2.5rem;
             margin-bottom: 15px;
-            color: var(--primary);
+            color: var(--industrial-blue);
         }
 
         .stat-value {
             font-size: 2rem;
             font-weight: bold;
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
             margin-bottom: 5px;
         }
 
@@ -790,7 +790,7 @@
         /* 加载动画 */
         .loader {
             border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary);
+            border-top: 5px solid var(--industrial-blue);
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -801,49 +801,6 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-        
-        /* 登录表单 */
-        .login-container {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 400px;
-            margin: 50px auto;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        }
-        
-        .login-title {
-            text-align: center;
-            margin-bottom: 25px;
-            color: var(--primary);
-        }
-        
-        .login-title i {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-        
-        .login-form .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .login-btn:hover {
-            background: var(--primary-dark);
         }
         
         /* 通知消息 */
@@ -877,307 +834,92 @@
             background-color: var(--primary);
         }
         
-        /* 用户状态 */
-        .user-status {
+        /* 工厂背景装饰 */
+        .factory-bg {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 8px 15px;
-            border-radius: 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), 
+                              url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%23e0e0e0" x="0" y="0" width="100" height="100"/><path d="M0,50 L100,50 M50,0 L50,100" stroke="%23d0d0d0" stroke-width="1"/></svg>');
+            background-size: 20px 20px;
+            z-index: 0;
         }
         
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 10px;
-        }
-        
-        .user-name {
-            font-weight: 500;
-            color: var(--dark);
-            margin-right: 15px;
-        }
-        
-        .logout-btn {
-            background: none;
-            border: none;
-            color: var(--secondary);
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-        
-        .logout-btn:hover {
-            color: var(--danger);
-        }
-        
-        /* 新增颜色 */
-        .btn-login {
-            background: var(--teal);
-        }
-        
-        .btn-login:hover {
-            background: #006666;
+        .factory-icon {
+            position: absolute;
+            font-size: 20rem;
+            color: rgba(0, 91, 159, 0.03);
+            z-index: 0;
+            bottom: -50px;
+            right: -50px;
+            transform: rotate(15deg);
         }
     </style>
 </head>
 
 <body>
+    <div class="factory-bg"></div>
+    <i class="fas fa-industry factory-icon"></i>
+    
     <div class="container">
-        <div class="user-status" id="userStatus" style="display: none;">
-            <div class="user-avatar">
-                <i class="fas fa-user"></i>
-            </div>
-            <div class="user-name" id="userName"></div>
-            <button class="logout-btn" id="logoutBtn">
-                <i class="fas fa-sign-out-alt"></i> 退出
-            </button>
-        </div>
-        
         <header>
-            <h1><i class="fas fa-clipboard-list"></i> 定子产线不良品记录系统</h1>
-            <p>准确记录产线不良品数据，助力产品质量分析与改进</p>
+            <div class="header-content">
+                <h1><i class="fas fa-clipboard-list"></i> 定子产线不良品记录系统</h1>
+                <p>实时记录与分析产线不良品数据，提升产品质量</p>
+            </div>
         </header>
 
-        <div id="loginSection" class="login-container">
-            <div class="login-title">
-                <i class="fas fa-user-lock"></i>
-                <h2>用户登录</h2>
+        <!-- 统计卡片 -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-industry"></i></div>
+                <div class="stat-value" id="totalRecords">0</div>
+                <div class="stat-label">总记录数</div>
             </div>
-            <form id="loginForm" class="login-form">
-                <div class="form-group">
-                    <label for="email">电子邮箱</label>
-                    <input type="email" id="email" class="form-control" placeholder="请输入邮箱" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">密码</label>
-                    <input type="password" id="password" class="form-control" placeholder="请输入密码" required>
-                </div>
-                <button type="submit" class="login-btn btn-login">
-                    <i class="fas fa-sign-in-alt"></i> 登录
-                </button>
-            </form>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="stat-value" id="totalDefectsStat">0</div>
+                <div class="stat-label">不良品总数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-value" id="activeLines">0</div>
+                <div class="stat-label">活跃产线</div>
+            </div>
         </div>
 
-        <div id="appContent" style="display: none;">
-            <!-- 优化后的统计卡片（仅保留总记录数和不良品总数） -->
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-industry"></i></div>
-                    <div class="stat-value" id="totalRecords">0</div>
-                    <div class="stat-label">总记录数</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
-                    <div class="stat-value" id="totalDefectsStat">0</div>
-                    <div class="stat-label">不良品总数</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-users"></i></div>
-                    <div class="stat-value" id="totalUsers">0</div>
-                    <div class="stat-label">活跃用户</div>
-                </div>
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> 填写说明</h3>
+            <ul>
+                <li>请准确填写每日产线不良品数据，所有字段均为必填项</li>
+                <li>日期请选择实际生产日期，产线请选择对应的产线编号</li>
+                <li>型号请填写完整的产品型号代码</li>
+                <li>记录人员请填写记录者真实姓名</li>
+                <li>可添加多种不良品类型及数量，并填写改进建议</li>
+                <li>填写完成后点击"提交记录"按钮保存数据</li>
+                <li>所有记录实时共享，可随时导出为Excel文件</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-edit"></i>
+                <span>不良品记录表单</span>
             </div>
 
-            <div class="instructions">
-                <h3><i class="fas fa-info-circle"></i> 填写说明</h3>
-                <ul>
-                    <li>请准确填写每日产线不良品数据，所有字段均为必填项</li>
-                    <li>日期请选择实际生产日期，产线请选择对应的产线编号</li>
-                    <li>型号请填写完整的产品型号代码</li>
-                    <li>记录人员请填写记录者真实姓名</li>
-                    <li><strong>新增功能：</strong>可添加多种不良品类型及数量，并填写改进建议</li>
-                    <li>填写完成后点击"提交记录"按钮保存数据</li>
-                    <li><strong>新增功能：</strong>系统会自动累积所有提交的数据，可随时导出为Excel文件</li>
-                    <li><strong>新增功能：</strong>最近记录按日期分类展示，支持排序和选择性导出</li>
-                    <li><strong>新增功能：</strong>可单独删除或批量删除记录数据</li>
-                </ul>
-            </div>
-
-            <div class="card">
-                <div class="card-title">
-                    <i class="fas fa-edit"></i>
-                    <span>不良品记录表单</span>
-                </div>
-
-                <form id="recordForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="recordDate"><i class="far fa-calendar-alt"></i> 记录日期</label>
-                            <input type="date" id="recordDate" class="form-control" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="productionLine"><i class="fas fa-industry"></i> 生产产线</label>
-                            <select id="productionLine" class="form-control" required>
-                                <option value="">-- 请选择产线 --</option>
-                                <option value="1">1线</option>
-                                <option value="2">2线</option>
-                                <option value="3">3线</option>
-                                <option value="4">4线</option>
-                                <option value="5">5线</option>
-                                <option value="6">6线</option>
-                                <option value="7">7线</option>
-                                <option value="8">8线</option>
-                                <option value="9">9线</option>
-                                <option value="10">10线</option>
-                                <option value="11">11线</option>
-                                <option value="12">12线</option>
-                                <option value="13">13线</option>
-                                <option value="14">14线</option>
-                                <option value="15">15线</option>
-                                <option value="16">16线</option>
-                                <option value="17">17线</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="productModel"><i class="fas fa-barcode"></i> 产品型号</label>
-                            <input type="text" id="productModel" class="form-control" placeholder="请输入产品型号" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="recorder"><i class="fas fa-user"></i> 记录人员</label>
-                            <input type="text" id="recorder" class="form-control" placeholder="请输入记录人姓名" required>
-                        </div>
+            <form id="recordForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="recordDate"><i class="far fa-calendar-alt"></i> 记录日期</label>
+                        <input type="date" id="recordDate" class="form-control" required>
                     </div>
 
-                    <!-- 不良品记录区域 -->
-                    <div class="defect-section">
-                        <div class="defect-header">
-                            <div class="defect-title">
-                                <i class="fas fa-exclamation-triangle"></i> 不良品记录
-                            </div>
-                        </div>
-
-                        <div class="defect-row">
-                            <div class="form-group">
-                                <label for="defectType"><i class="fas fa-tag"></i> 不良品类型</label>
-                                <select id="defectType" class="form-control">
-                                    <option value="">-- 请选择类型 --</option>
-                                    <option value="外观缺陷">外观缺陷</option>
-                                    <option value="尺寸偏差">尺寸偏差</option>
-                                    <option value="材料问题">材料问题</option>
-                                    <option value="绝缘不良">绝缘不良</option>
-                                    <option value="焊接问题">焊接问题</option>
-                                    <option value="性能不良">性能不良</option>
-                                    <option value="绕线问题">绕线问题</option>
-                                    <option value="其他问题">其他问题</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="defectQuantity"><i class="fas fa-hashtag"></i> 不良品数量</label>
-                                <input type="number" id="defectQuantity" class="form-control" min="1" value="1">
-                            </div>
-
-                            <div class="form-group">
-                                <button type="button" id="addDefect" class="btn btn-add btn-sm">
-                                    <i class="fas fa-plus"></i> 添加项目
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="defect-list" id="defectList">
-                            <div class="defect-item">
-                                <div>不良品类型</div>
-                                <div>数量</div>
-                                <div>操作</div>
-                            </div>
-                            <div class="empty-state" id="emptyDefects">暂无不良品记录，请添加项目</div>
-                        </div>
-
-                        <div class="total-defects">
-                            总计不良品数量: <span id="totalDefects">0</span> 件
-                        </div>
-                    </div>
-
-                    <!-- 备注和建议区域 -->
-                    <div class="remark-section">
-                        <div class="form-group">
-                            <label for="remark"><i class="fas fa-comment"></i> 备注与改进建议</label>
-                            <textarea id="remark" class="form-control" placeholder="请输入不良品原因分析及改进建议"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="preview-section">
-                        <div class="preview-title">
-                            <i class="fas fa-eye"></i> 数据预览
-                        </div>
-                        <div class="preview-grid">
-                            <div class="preview-item">
-                                <div class="preview-label">记录日期</div>
-                                <div class="preview-value" id="previewDate">未选择</div>
-                            </div>
-                            <div class="preview-item">
-                                <div class="preview-label">生产产线</div>
-                                <div class="preview-value" id="previewLine">未选择</div>
-                            </div>
-                            <div class="preview-item">
-                                <div class="preview-label">产品型号</div>
-                                <div class="preview-value" id="previewModel">未填写</div>
-                            </div>
-                            <div class="preview-item">
-                                <div class="preview-label">记录人员</div>
-                                <div class="preview-value" id="previewRecorder">未填写</div>
-                            </div>
-                            <div class="preview-item">
-                                <div class="preview-label">不良品总数</div>
-                                <div class="preview-value" id="previewTotalDefects">0</div>
-                            </div>
-                            <div class="preview-item">
-                                <div class="preview-label">不良品类型</div>
-                                <div class="preview-value" id="previewDefectTypes">无</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-block">
-                        <i class="fas fa-paper-plane"></i> 提交记录
-                    </button>
-                    <button type="reset" class="btn btn-block btn-reset">
-                        <i class="fas fa-redo"></i> 重置表单
-                    </button>
-                </form>
-            </div>
-
-            <div class="card record-history">
-                <div class="card-title">
-                    <i class="fas fa-history"></i>
-                    <span>最近记录</span>
-                </div>
-
-                <!-- 排序和筛选控件 -->
-                <div class="sort-controls">
-                    <div>
-                        <label for="sortField" class="mr-2">排序字段：</label>
-                        <select id="sortField" class="sort-select">
-                            <option value="date">记录日期</option>
-                            <option value="line">生产产线</option>
-                            <option value="defects">不良品数量</option>
-                            <option value="timestamp">提交时间</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="sortOrder" class="mr-2">排序方式：</label>
-                        <select id="sortOrder" class="sort-select">
-                            <option value="desc">降序</option>
-                            <option value="asc">升序</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="filterLine" class="mr-2">产线筛选：</label>
-                        <select id="filterLine" class="sort-select">
-                            <option value="">全部产线</option>
+                    <div class="form-group">
+                        <label for="productionLine"><i class="fas fa-industry"></i> 生产产线</label>
+                        <select id="productionLine" class="form-control" required>
+                            <option value="">-- 请选择产线 --</option>
                             <option value="1">1线</option>
                             <option value="2">2线</option>
                             <option value="3">3线</option>
@@ -1197,57 +939,214 @@
                             <option value="17">17线</option>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="productModel"><i class="fas fa-barcode"></i> 产品型号</label>
+                        <input type="text" id="productModel" class="form-control" placeholder="请输入产品型号" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recorder"><i class="fas fa-user"></i> 记录人员</label>
+                        <input type="text" id="recorder" class="form-control" placeholder="请输入记录人姓名" required>
+                    </div>
                 </div>
 
-                <!-- 全选控制 -->
-                <div class="select-all-container">
-                    <input type="checkbox" id="selectAllRecords" class="record-checkbox">
-                    <label for="selectAllRecords" class="select-all-label">全选记录</label>
+                <!-- 不良品记录区域 -->
+                <div class="defect-section">
+                    <div class="defect-header">
+                        <div class="defect-title">
+                            <i class="fas fa-exclamation-triangle"></i> 不良品记录
+                        </div>
+                    </div>
+
+                    <div class="defect-row">
+                        <div class="form-group">
+                            <label for="defectType"><i class="fas fa-tag"></i> 不良品类型</label>
+                            <select id="defectType" class="form-control">
+                                <option value="">-- 请选择类型 --</option>
+                                <option value="外观缺陷">外观缺陷</option>
+                                <option value="尺寸偏差">尺寸偏差</option>
+                                <option value="材料问题">材料问题</option>
+                                <option value="绝缘不良">绝缘不良</option>
+                                <option value="焊接问题">焊接问题</option>
+                                <option value="性能不良">性能不良</option>
+                                <option value="绕线问题">绕线问题</option>
+                                <option value="其他问题">其他问题</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="defectQuantity"><i class="fas fa-hashtag"></i> 不良品数量</label>
+                            <input type="number" id="defectQuantity" class="form-control" min="1" value="1">
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" id="addDefect" class="btn btn-add btn-sm">
+                                <i class="fas fa-plus"></i> 添加项目
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="defect-list" id="defectList">
+                        <div class="defect-item">
+                            <div>不良品类型</div>
+                            <div>数量</div>
+                            <div>操作</div>
+                        </div>
+                        <div class="empty-state" id="emptyDefects">暂无不良品记录，请添加项目</div>
+                    </div>
+
+                    <div class="total-defects">
+                        总计不良品数量: <span id="totalDefects">0</span> 件
+                    </div>
                 </div>
 
-                <div id="recordHistory">
-                    <div class="loader" id="loadingIndicator"></div>
+                <!-- 备注和建议区域 -->
+                <div class="remark-section">
+                    <div class="form-group">
+                        <label for="remark"><i class="fas fa-comment"></i> 备注与改进建议</label>
+                        <textarea id="remark" class="form-control" placeholder="请输入不良品原因分析及改进建议"></textarea>
+                    </div>
                 </div>
 
-                <!-- 选中记录统计 -->
-                <div class="selected-records">
-                    <p>已选择 <span id="selectedCount" class="selected-count">0</span> 条记录</p>
+                <div class="preview-section">
+                    <div class="preview-title">
+                        <i class="fas fa-eye"></i> 数据预览
+                    </div>
+                    <div class="preview-grid">
+                        <div class="preview-item">
+                            <div class="preview-label">记录日期</div>
+                            <div class="preview-value" id="previewDate">未选择</div>
+                        </div>
+                        <div class="preview-item">
+                            <div class="preview-label">生产产线</div>
+                            <div class="preview-value" id="previewLine">未选择</div>
+                        </div>
+                        <div class="preview-item">
+                            <div class="preview-label">产品型号</div>
+                            <div class="preview-value" id="previewModel">未填写</div>
+                        </div>
+                        <div class="preview-item">
+                            <div class="preview-label">记录人员</div>
+                            <div class="preview-value" id="previewRecorder">未填写</div>
+                        </div>
+                        <div class="preview-item">
+                            <div class="preview-label">不良品总数</div>
+                            <div class="preview-value" id="previewTotalDefects">0</div>
+                        </div>
+                        <div class="preview-item">
+                            <div class="preview-label">不良品类型</div>
+                            <div class="preview-value" id="previewDefectTypes">无</div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- 批量删除按钮 -->
-                <button type="button" id="deleteSelectedRecords" class="btn btn-block btn-delete-selected" disabled>
-                    <i class="fas fa-trash"></i> 删除选中记录
+                <button type="submit" class="btn btn-block">
+                    <i class="fas fa-paper-plane"></i> 提交记录
                 </button>
+                <button type="reset" class="btn btn-block btn-reset">
+                    <i class="fas fa-redo"></i> 重置表单
+                </button>
+            </form>
+        </div>
 
-                <div class="record-count">
-                    <span id="recordCount">已保存 0 条记录</span>
+        <div class="card record-history">
+            <div class="card-title">
+                <i class="fas fa-history"></i>
+                <span>实时记录</span>
+            </div>
+
+            <!-- 排序和筛选控件 -->
+            <div class="sort-controls">
+                <div>
+                    <label for="sortField" class="mr-2">排序字段：</label>
+                    <select id="sortField" class="sort-select">
+                        <option value="date">记录日期</option>
+                        <option value="line">生产产线</option>
+                        <option value="defects">不良品数量</option>
+                        <option value="timestamp">提交时间</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="sortOrder" class="mr-2">排序方式：</label>
+                    <select id="sortOrder" class="sort-select">
+                        <option value="desc">降序</option>
+                        <option value="asc">升序</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="filterLine" class="mr-2">产线筛选：</label>
+                    <select id="filterLine" class="sort-select">
+                        <option value="">全部产线</option>
+                        <option value="1">1线</option>
+                        <option value="2">2线</option>
+                        <option value="3">3线</option>
+                        <option value="4">4线</option>
+                        <option value="5">5线</option>
+                        <option value="6">6线</option>
+                        <option value="7">7线</option>
+                        <option value="8">8线</option>
+                        <option value="9">9线</option>
+                        <option value="10">10线</option>
+                        <option value="11">11线</option>
+                        <option value="12">12线</option>
+                        <option value="13">13线</option>
+                        <option value="14">14线</option>
+                        <option value="15">15线</option>
+                        <option value="16">16线</option>
+                        <option value="17">17线</option>
+                    </select>
                 </div>
             </div>
 
-            <!-- 导出区域 -->
-            <div class="card export-section">
-                <div class="export-title">
-                    <i class="fas fa-file-excel"></i>
-                    <span>数据导出</span>
-                </div>
+            <!-- 全选控制 -->
+            <div class="select-all-container">
+                <input type="checkbox" id="selectAllRecords" class="record-checkbox">
+                <label for="selectAllRecords" class="select-all-label">全选记录</label>
+            </div>
 
-                <button type="button" id="exportAllRecords" class="btn btn-block btn-export">
-                    <i class="fas fa-file-excel"></i> 导出所有记录
-                </button>
+            <div id="recordHistory">
+                <div class="loader" id="loadingIndicator"></div>
+            </div>
 
-                <button type="button" id="exportSelectedRecords" class="btn btn-block btn-export-selected">
-                    <i class="fas fa-file-excel"></i> 导出选中记录
-                </button>
+            <!-- 选中记录统计 -->
+            <div class="selected-records">
+                <p>已选择 <span id="selectedCount" class="selected-count">0</span> 条记录</p>
+            </div>
 
-                <div class="export-instructions">
-                    <h4><i class="fas fa-info-circle"></i> 导出说明</h4>
-                    <ul>
-                        <li>点击"导出所有记录"将导出系统中所有的不良品记录数据</li>
-                        <li>点击"导出选中记录"将只导出您勾选的记录数据</li>
-                        <li>导出的数据格式为Excel文件，可直接使用Excel或WPS等软件打开</li>
-                        <li>导出的Excel文件包含完整的不良品记录信息，便于数据分析和报告生成</li>
-                    </ul>
-                </div>
+            <!-- 批量删除按钮 -->
+            <button type="button" id="deleteSelectedRecords" class="btn btn-block btn-delete-selected" disabled>
+                <i class="fas fa-trash"></i> 删除选中记录
+            </button>
+
+            <div class="record-count">
+                <span id="recordCount">已保存 0 条记录</span>
+            </div>
+        </div>
+
+        <!-- 导出区域 -->
+        <div class="card export-section">
+            <div class="export-title">
+                <i class="fas fa-file-excel"></i>
+                <span>数据导出</span>
+            </div>
+
+            <button type="button" id="exportAllRecords" class="btn btn-block btn-export">
+                <i class="fas fa-file-excel"></i> 导出所有记录
+            </button>
+
+            <button type="button" id="exportSelectedRecords" class="btn btn-block btn-export-selected">
+                <i class="fas fa-file-excel"></i> 导出选中记录
+            </button>
+
+            <div class="export-instructions">
+                <h4><i class="fas fa-info-circle"></i> 导出说明</h4>
+                <ul>
+                    <li>点击"导出所有记录"将导出系统中所有的不良品记录数据</li>
+                    <li>点击"导出选中记录"将只导出您勾选的记录数据</li>
+                    <li>导出的数据格式为Excel文件，可直接使用Excel或WPS等软件打开</li>
+                    <li>导出的Excel文件包含完整的不良品记录信息，便于数据分析和报告生成</li>
+                </ul>
             </div>
         </div>
 
@@ -1293,17 +1192,8 @@
         // 初始化Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const auth = firebase.auth();
         
         // 获取所有必要的 DOM 元素
-        const loginSection = document.getElementById('loginSection');
-        const appContent = document.getElementById('appContent');
-        const userStatus = document.getElementById('userStatus');
-        const userName = document.getElementById('userName');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const loginForm = document.getElementById('loginForm');
-        const notification = document.getElementById('notification');
-        
         const recordForm = document.getElementById('recordForm');
         const defectList = document.getElementById('defectList');
         const emptyDefects = document.getElementById('emptyDefects');
@@ -1318,7 +1208,7 @@
         const recordCount = document.getElementById('recordCount');
         const totalRecords = document.getElementById('totalRecords');
         const totalDefectsStat = document.getElementById('totalDefectsStat');
-        const totalUsers = document.getElementById('totalUsers');
+        const activeLines = document.getElementById('activeLines');
         const addDefect = document.getElementById('addDefect');
         const exportAllRecords = document.getElementById('exportAllRecords');
         const exportSelectedRecords = document.getElementById('exportSelectedRecords');
@@ -1330,11 +1220,11 @@
         const confirmDelete = document.getElementById('confirmDelete');
         const cancelDelete = document.getElementById('cancelDelete');
         const loadingIndicator = document.getElementById('loadingIndicator');
+        const notification = document.getElementById('notification');
 
         // 存储所有记录
         let records = [];
         let currentDeleteRecordId;
-        let currentUser = null;
 
         // 显示通知
         function showNotification(message, type) {
@@ -1345,43 +1235,6 @@
                 notification.classList.remove('show');
             }, 3000);
         }
-
-        // 用户登录
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    currentUser = userCredential.user;
-                    showNotification('登录成功！', 'success');
-                    setTimeout(() => {
-                        loginSection.style.display = 'none';
-                        appContent.style.display = 'block';
-                        userStatus.style.display = 'flex';
-                        userName.textContent = currentUser.email;
-                        loadRecords();
-                    }, 1000);
-                })
-                .catch((error) => {
-                    showNotification(`登录失败: ${error.message}`, 'error');
-                });
-        });
-
-        // 用户退出
-        logoutBtn.addEventListener('click', function() {
-            auth.signOut().then(() => {
-                currentUser = null;
-                loginSection.style.display = 'block';
-                appContent.style.display = 'none';
-                userStatus.style.display = 'none';
-                records = [];
-                recordHistory.innerHTML = '<div class="loader" id="loadingIndicator"></div>';
-                showNotification('已退出登录', 'info');
-            });
-        });
 
         // 添加不良品项目
         addDefect.addEventListener('click', function () {
@@ -1444,17 +1297,14 @@
                     });
                     previewDefectTypes.textContent = newDefectTypes.join(', ') || '无';
                 });
+            } else {
+                showNotification('请选择不良品类型并输入数量', 'error');
             }
         });
 
         // 提交记录
         recordForm.addEventListener('submit', function (e) {
             e.preventDefault();
-
-            if (!currentUser) {
-                showNotification('请先登录后再提交记录', 'error');
-                return;
-            }
 
             const recordDate = document.getElementById('recordDate').value;
             const productionLine = document.getElementById('productionLine').value;
@@ -1485,9 +1335,7 @@
                 defects,
                 totalDefects: total,
                 remark,
-                timestamp: new Date().getTime(),
-                userId: currentUser.uid,
-                userEmail: currentUser.email
+                timestamp: new Date().getTime()
             };
 
             // 保存到Firebase
@@ -1524,12 +1372,14 @@
                 .onSnapshot((querySnapshot) => {
                     records = [];
                     let totalDefects = 0;
+                    const activeLinesSet = new Set();
                     
                     querySnapshot.forEach((doc) => {
                         const record = doc.data();
                         record.id = doc.id;
                         records.push(record);
                         totalDefects += record.totalDefects;
+                        activeLinesSet.add(record.line);
                     });
                     
                     updateRecordHistory();
@@ -1538,6 +1388,7 @@
                     
                     totalRecords.textContent = records.length;
                     totalDefectsStat.textContent = totalDefects;
+                    activeLines.textContent = activeLinesSet.size;
                 }, (error) => {
                     showNotification(`加载记录失败: ${error.message}`, 'error');
                     loadingIndicator.style.display = 'none';
@@ -1603,10 +1454,6 @@
                                         <div class="record-preview-label">不良品类型</div>
                                         <div class="record-preview-value">${record.defects.map(defect => defect.type).join(', ')}</div>
                                     </div>
-                                    <div class="record-preview-item">
-                                        <div class="record-preview-label">提交人员</div>
-                                        <div class="record-preview-value">${record.userEmail}</div>
-                                    </div>
                                 </div>
                                 <div class="record-actions">
                                     <button type="button" class="btn btn-delete btn-sm" data-id="${record.id}">
@@ -1658,14 +1505,14 @@
 
         // 更新统计信息
         function updateStats() {
-            // 统计用户数量
-            const users = new Set();
+            // 统计活跃产线数量
+            const lines = new Set();
             records.forEach(record => {
-                if (record.userEmail) {
-                    users.add(record.userEmail);
+                if (record.line) {
+                    lines.add(record.line);
                 }
             });
-            totalUsers.textContent = users.size;
+            activeLines.textContent = lines.size;
         }
 
         // 排序记录
@@ -1726,7 +1573,22 @@
 
         // 导出所有记录
         exportAllRecords.addEventListener('click', function () {
-            const ws = XLSX.utils.json_to_sheet(records);
+            if (records.length === 0) {
+                showNotification('没有记录可导出', 'error');
+                return;
+            }
+            
+            const ws = XLSX.utils.json_to_sheet(records.map(r => ({
+                "记录日期": r.date,
+                "生产产线": r.line + "线",
+                "产品型号": r.model,
+                "记录人员": r.recorder,
+                "不良品总数": r.totalDefects,
+                "不良品类型": r.defects.map(d => d.type).join(','),
+                "备注": r.remark,
+                "提交时间": new Date(r.timestamp).toLocaleString()
+            })));
+            
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, '不良品记录');
             XLSX.writeFile(wb, '不良品记录_所有记录.xlsx');
@@ -1747,7 +1609,17 @@
             });
 
             if (selectedRecords.length > 0) {
-                const ws = XLSX.utils.json_to_sheet(selectedRecords);
+                const ws = XLSX.utils.json_to_sheet(selectedRecords.map(r => ({
+                    "记录日期": r.date,
+                    "生产产线": r.line + "线",
+                    "产品型号": r.model,
+                    "记录人员": r.recorder,
+                    "不良品总数": r.totalDefects,
+                    "不良品类型": r.defects.map(d => d.type).join(','),
+                    "备注": r.remark,
+                    "提交时间": new Date(r.timestamp).toLocaleString()
+                })));
+                
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, '不良品记录');
                 XLSX.writeFile(wb, '不良品记录_选中记录.xlsx');
@@ -1822,21 +1694,13 @@
         document.getElementById('sortOrder').addEventListener('change', updateRecordHistory);
         document.getElementById('filterLine').addEventListener('change', updateRecordHistory);
         
-        // 初始化
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                currentUser = user;
-                loginSection.style.display = 'none';
-                appContent.style.display = 'block';
-                userStatus.style.display = 'flex';
-                userName.textContent = user.email;
-                loadRecords();
-            } else {
-                loginSection.style.display = 'block';
-                appContent.style.display = 'none';
-                userStatus.style.display = 'none';
-            }
-        });
+        // 初始化加载记录
+        loadRecords();
+        
+        // 设置默认日期为今天
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('recordDate').value = today;
+        previewDate.textContent = today;
     </script>
 </body>
 </html>
