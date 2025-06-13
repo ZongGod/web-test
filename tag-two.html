@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>定子产线不良品记录系统（实时版）</title>
+    <title>定子产线不良品记录系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- 添加 Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -29,6 +27,10 @@
             --danger: #ea4335;
             --gray: #dadce0;
             --purple: #673ab7;
+            --teal: #008080;
+            --industrial-blue: #005b9f;
+            --industrial-orange: #ff6b35;
+            --industrial-green: #4caf50;
         }
 
         body {
@@ -47,58 +49,40 @@
         header {
             text-align: center;
             padding: 30px 0;
-            margin-bottom: 30px;
-            perspective: 1000px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .header-content {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 2;
         }
 
         header h1 {
             font-size: 2.8rem;
-            background: linear-gradient(135deg, #1a73e8 0%, #0d5cb6 100%);
+            background: linear-gradient(135deg, var(--industrial-blue) 0%, var(--primary) 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             margin-bottom: 10px;
-            text-shadow: 0 4px 8px rgba(26, 115, 232, 0.2);
             position: relative;
             display: inline-block;
-            transform-style: preserve-3d;
-            transition: transform 0.5s ease;
-        }
-
-        header h1:hover {
-            transform: translateY(-5px) rotateX(5deg);
-        }
-
-        header h1::after {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            height: 5px;
-            background: linear-gradient(90deg, #1a73e8, #5f6368);
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         header h1 i {
             margin-right: 15px;
             font-size: 1.8rem;
-            color: #1a73e8;
-            transform: translateZ(20px);
+            color: var(--industrial-blue);
             animation: float 3s ease-in-out infinite;
         }
 
         @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0) translateZ(20px);
-            }
-
-            50% {
-                transform: translateY(-8px) translateZ(20px);
-            }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         header p {
@@ -106,7 +90,6 @@
             font-size: 1.1rem;
             max-width: 700px;
             margin: 25px auto 0;
-            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
         }
 
         .card {
@@ -116,6 +99,18 @@
             padding: 30px;
             margin-bottom: 30px;
             transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--industrial-blue), var(--industrial-green));
         }
 
         .card:hover {
@@ -126,7 +121,7 @@
         .card-title {
             display: flex;
             align-items: center;
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
             font-size: 1.4rem;
             margin-bottom: 25px;
             padding-bottom: 15px;
@@ -136,6 +131,7 @@
         .card-title i {
             margin-right: 12px;
             font-size: 1.6rem;
+            color: var(--industrial-blue);
         }
 
         .form-grid {
@@ -183,7 +179,7 @@
         .btn {
             display: inline-block;
             padding: 14px 32px;
-            background: var(--primary);
+            background: var(--industrial-blue);
             color: white;
             border: none;
             border-radius: 8px;
@@ -191,13 +187,13 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(26, 115, 232, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .btn:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 6px 10px rgba(26, 115, 232, 0.3);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
         }
 
         .btn-block {
@@ -224,7 +220,7 @@
         }
 
         .btn-add {
-            background: var(--success);
+            background: var(--industrial-green);
             margin-top: 10px;
         }
 
@@ -237,11 +233,12 @@
             border-radius: 8px;
             padding: 20px;
             margin-top: 25px;
+            border: 1px solid #e0e0e0;
         }
 
         .preview-title {
             font-size: 1.2rem;
-            color: var(--primary);
+            color: var(--industrial-blue);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -261,7 +258,7 @@
             background: white;
             padding: 15px;
             border-radius: 8px;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--industrial-blue);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
@@ -279,14 +276,14 @@
 
         .instructions {
             background: #e8f0fe;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--industrial-blue);
             padding: 15px 20px;
             border-radius: 0 8px 8px 0;
             margin: 25px 0;
         }
 
         .instructions h3 {
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -310,6 +307,7 @@
             padding: 20px;
             background: #f8f9fa;
             border-radius: 8px;
+            border: 1px solid #e0e0e0;
         }
 
         .defect-header {
@@ -321,7 +319,7 @@
 
         .defect-title {
             font-size: 1.2rem;
-            color: var(--primary);
+            color: var(--industrial-blue);
             display: flex;
             align-items: center;
         }
@@ -366,7 +364,7 @@
             margin-top: 15px;
             font-weight: bold;
             font-size: 1.1rem;
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
         }
 
         textarea {
@@ -395,7 +393,7 @@
 
         .logo {
             font-weight: 700;
-            color: var(--primary);
+            color: var(--industrial-blue);
             margin-bottom: 10px;
             font-size: 1.2rem;
         }
@@ -487,7 +485,7 @@
             padding: 12px 15px;
             border-radius: 8px 8px 0 0;
             font-weight: bold;
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -528,7 +526,7 @@
         }
 
         .record-header h4 {
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
         }
 
         .record-time {
@@ -546,6 +544,7 @@
             padding: 8px;
             background: #f8f9fa;
             border-radius: 6px;
+            border: 1px solid #e0e0e0;
         }
 
         .record-preview-label {
@@ -596,7 +595,7 @@
 
         .selected-count {
             font-weight: bold;
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
         }
 
         .btn-export-selected {
@@ -619,7 +618,7 @@
 
         .export-title {
             font-size: 1.2rem;
-            color: var(--primary);
+            color: var(--industrial-blue);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -634,11 +633,11 @@
             padding: 12px;
             background: #e8f0fe;
             border-radius: 8px;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--industrial-blue);
         }
 
         .export-instructions h4 {
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
             margin-bottom: 8px;
         }
 
@@ -763,6 +762,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
             text-align: center;
             transition: transform 0.3s;
+            border-left: 4px solid var(--industrial-blue);
         }
 
         .stat-card:hover {
@@ -772,13 +772,13 @@
         .stat-icon {
             font-size: 2.5rem;
             margin-bottom: 15px;
-            color: var(--primary);
+            color: var(--industrial-blue);
         }
 
         .stat-value {
             font-size: 2rem;
             font-weight: bold;
-            color: var(--primary-dark);
+            color: var(--industrial-blue);
             margin-bottom: 5px;
         }
 
@@ -787,65 +787,89 @@
             font-size: 1rem;
         }
         
-        /* 实时通知样式 */
-        .realtime-notification {
+        /* 加载动画 */
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--industrial-blue);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 通知消息 */
+        .notification {
             position: fixed;
-            bottom: 20px;
+            top: 20px;
             right: 20px;
-            background: var(--success);
-            color: white;
             padding: 15px 25px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: flex;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-        }
-        
-        .realtime-notification.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .realtime-notification i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-        
-        .realtime-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: var(--danger);
             color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 0.8rem;
-            font-weight: bold;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            transform: translateX(200%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+        }
+        
+        .notification.info {
+            background-color: var(--primary);
+        }
+        
+        /* 工厂背景装饰 */
+        .factory-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), 
+                              url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%23e0e0e0" x="0" y="0" width="100" height="100"/><path d="M0,50 L100,50 M50,0 L50,100" stroke="%23d0d0d0" stroke-width="1"/></svg>');
+            background-size: 20px 20px;
+            z-index: 0;
+        }
+        
+        .factory-icon {
+            position: absolute;
+            font-size: 20rem;
+            color: rgba(0, 91, 159, 0.03);
+            z-index: 0;
+            bottom: -50px;
+            right: -50px;
+            transform: rotate(15deg);
         }
     </style>
 </head>
 
 <body>
+    <div class="factory-bg"></div>
+    <i class="fas fa-industry factory-icon"></i>
+    
     <div class="container">
         <header>
-            <h1><i class="fas fa-clipboard-list"></i> 定子产线不良品记录系统</h1>
-            <p>准确记录产线不良品数据，助力产品质量分析与改进（实时协作版）</p>
+            <div class="header-content">
+                <h1><i class="fas fa-clipboard-list"></i> 定子产线不良品记录系统</h1>
+                <p>实时记录与分析产线不良品数据，提升产品质量</p>
+            </div>
         </header>
-
-        <!-- 实时通知 -->
-        <div class="realtime-notification" id="realtimeNotification">
-            <i class="fas fa-sync-alt"></i>
-            <span id="notificationText">新记录已同步</span>
-            <div class="realtime-badge" id="notificationBadge">1</div>
-        </div>
 
         <!-- 统计卡片 -->
         <div class="stats-container">
@@ -860,9 +884,9 @@
                 <div class="stat-label">不良品总数</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-users"></i></div>
-                <div class="stat-value" id="activeUsers">1</div>
-                <div class="stat-label">当前用户</div>
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-value" id="activeLines">0</div>
+                <div class="stat-label">活跃产线</div>
             </div>
         </div>
 
@@ -873,12 +897,9 @@
                 <li>日期请选择实际生产日期，产线请选择对应的产线编号</li>
                 <li>型号请填写完整的产品型号代码</li>
                 <li>记录人员请填写记录者真实姓名</li>
-                <li><strong>新增功能：</strong>可添加多种不良品类型及数量，并填写改进建议</li>
+                <li>可添加多种不良品类型及数量，并填写改进建议</li>
                 <li>填写完成后点击"提交记录"按钮保存数据</li>
-                <li><strong>新增功能：</strong>系统会自动累积所有提交的数据，可随时导出为Excel文件</li>
-                <li><strong>新增功能：</strong>最近记录按日期分类展示，支持排序和选择性导出</li>
-                <li><strong>新增功能：</strong>可单独删除或批量删除记录数据</li>
-                <li><strong style="color: var(--success);">实时协作：</strong>所有记录实时同步，可即时查看他人提交的数据</li>
+                <li>所有记录实时共享，可随时导出为Excel文件</li>
             </ul>
         </div>
 
@@ -1032,10 +1053,7 @@
         <div class="card record-history">
             <div class="card-title">
                 <i class="fas fa-history"></i>
-                <span>最近记录</span>
-                <span style="font-size: 0.9rem; color: var(--success); margin-left: 15px;" id="realtimeStatus">
-                    <i class="fas fa-circle"></i> 实时同步中
-                </span>
+                <span>实时记录</span>
             </div>
 
             <!-- 排序和筛选控件 -->
@@ -1088,10 +1106,7 @@
             </div>
 
             <div id="recordHistory">
-                <div style="text-align: center; padding: 30px;">
-                    <i class="fas fa-database" style="font-size: 3rem; color: #dadce0; margin-bottom: 15px;"></i>
-                    <p style="color: var(--secondary);">正在加载记录数据...</p>
-                </div>
+                <div class="loader" id="loadingIndicator"></div>
             </div>
 
             <!-- 选中记录统计 -->
@@ -1105,7 +1120,7 @@
             </button>
 
             <div class="record-count">
-                <span id="recordCount">正在加载数据...</span>
+                <span id="recordCount">已保存 0 条记录</span>
             </div>
         </div>
 
@@ -1137,7 +1152,7 @@
 
         <footer>
             <div class="logo">定子产线质量管理系统</div>
-            <p>© 2023 管培生办公室 | 确保产品质量，提升生产效率 | 实时协作版本</p>
+            <p>© 2023 智能制造事业部 | 确保产品质量，提升生产效率</p>
         </footer>
     </div>
 
@@ -1158,28 +1173,31 @@
             </div>
         </div>
     </div>
+    
+    <!-- 通知消息 -->
+    <div class="notification" id="notification"></div>
 
     <script>
         // Firebase配置
         const firebaseConfig = {
-            apiKey: "AIzaSyB0tYV1c4F5FjPmYb2xZzFJ8V9Jv2DkKXw",
-            authDomain: "defect-record-system.firebaseapp.com",
-            projectId: "defect-record-system",
-            storageBucket: "defect-record-system.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdef1234567890abcdef"
+            apiKey: "AIzaSyDuknMmqAIKt-bvVkx-bVq8K1liuE4mR04",
+            authDomain: "my-data-ca1c8.firebaseapp.com",
+            projectId: "my-data-ca1c8",
+            storageBucket: "my-data-ca1c8.firebasestorage.app",
+            messagingSenderId: "385667932458",
+            appId: "1:385667932458:web:007e20290412ff1b91be53",
+            measurementId: "G-EMKWK3M4KY"
         };
 
         // 初始化Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const defectRecordsRef = db.collection("defectRecords");
-
+        
         // 获取所有必要的 DOM 元素
         const recordForm = document.getElementById('recordForm');
         const defectList = document.getElementById('defectList');
         const emptyDefects = document.getElementById('emptyDefects');
-        const totalDefects = document.getElementById('totalDefects');
+        const totalDefectsEl = document.getElementById('totalDefects');
         const previewDate = document.getElementById('previewDate');
         const previewLine = document.getElementById('previewLine');
         const previewModel = document.getElementById('previewModel');
@@ -1190,6 +1208,7 @@
         const recordCount = document.getElementById('recordCount');
         const totalRecords = document.getElementById('totalRecords');
         const totalDefectsStat = document.getElementById('totalDefectsStat');
+        const activeLines = document.getElementById('activeLines');
         const addDefect = document.getElementById('addDefect');
         const exportAllRecords = document.getElementById('exportAllRecords');
         const exportSelectedRecords = document.getElementById('exportSelectedRecords');
@@ -1200,54 +1219,20 @@
         const deleteModalClose = document.getElementById('deleteModalClose');
         const confirmDelete = document.getElementById('confirmDelete');
         const cancelDelete = document.getElementById('cancelDelete');
-        const realtimeNotification = document.getElementById('realtimeNotification');
-        const notificationText = document.getElementById('notificationText');
-        const notificationBadge = document.getElementById('notificationBadge');
-        const realtimeStatus = document.getElementById('realtimeStatus');
-        const activeUsers = document.getElementById('activeUsers');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const notification = document.getElementById('notification');
 
         // 存储所有记录
         let records = [];
         let currentDeleteRecordId;
-        let newRecordsCount = 0;
-        let notificationTimeout;
-        let userCount = 0;
 
-        // 生成随机用户名
-        const recorderName = "用户" + Math.floor(Math.random() * 1000);
-        document.getElementById('recorder').value = recorderName;
-        
-        // 监听在线用户数
-        function setupPresence() {
-            const presenceRef = db.ref('presence');
-            const userRef = presenceRef.push();
+        // 显示通知
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
             
-            userRef.set(true);
-            userRef.onDisconnect().remove();
-            
-            presenceRef.on('value', (snapshot) => {
-                userCount = snapshot.numChildren();
-                activeUsers.textContent = userCount;
-            });
-        }
-
-        // 显示实时通知
-        function showNotification(message, count) {
-            notificationText.textContent = message;
-            notificationBadge.textContent = count;
-            
-            // 清除之前的超时
-            if (notificationTimeout) {
-                clearTimeout(notificationTimeout);
-            }
-            
-            // 显示通知
-            realtimeNotification.classList.add('show');
-            
-            // 3秒后隐藏通知
-            notificationTimeout = setTimeout(() => {
-                realtimeNotification.classList.remove('show');
-                newRecordsCount = 0;
+            setTimeout(() => {
+                notification.classList.remove('show');
             }, 3000);
         }
 
@@ -1278,7 +1263,7 @@
                 defectItems.forEach(item => {
                     total += parseInt(item.children[1].textContent);
                 });
-                totalDefects.textContent = total;
+                totalDefectsEl.textContent = total;
                 previewTotalDefects.textContent = total;
 
                 // 更新预览的不良品类型
@@ -1302,7 +1287,7 @@
                     newDefectItems.forEach(item => {
                         newTotal += parseInt(item.children[1].textContent);
                     });
-                    totalDefects.textContent = newTotal;
+                    totalDefectsEl.textContent = newTotal;
                     previewTotalDefects.textContent = newTotal;
 
                     // 更新预览的不良品类型
@@ -1312,6 +1297,8 @@
                     });
                     previewDefectTypes.textContent = newDefectTypes.join(', ') || '无';
                 });
+            } else {
+                showNotification('请选择不良品类型并输入数量', 'error');
             }
         });
 
@@ -1327,6 +1314,11 @@
             const defectItems = defectList.querySelectorAll('.defect-item:not(:first-child)');
             const defects = [];
             let total = 0;
+
+            if (defectItems.length === 0) {
+                showNotification('请至少添加一种不良品类型', 'error');
+                return;
+            }
 
             defectItems.forEach(item => {
                 const type = item.children[0].textContent;
@@ -1346,14 +1338,11 @@
                 timestamp: new Date().getTime()
             };
 
-            // 添加到Firestore
-            defectRecordsRef.add(newRecord)
+            // 保存到Firebase
+            db.collection("records").add(newRecord)
                 .then(() => {
-                    // 成功添加后重置表单
+                    showNotification('记录提交成功！', 'success');
                     recordForm.reset();
-                    document.getElementById('recorder').value = recorderName;
-                    
-                    // 重置不良品列表
                     defectList.innerHTML = `
                         <div class="defect-item">
                             <div>不良品类型</div>
@@ -1362,105 +1351,54 @@
                         </div>
                         <div class="empty-state" id="emptyDefects">暂无不良品记录，请添加项目</div>
                     `;
-                    totalDefects.textContent = 0;
-                    
-                    // 重置预览
+                    totalDefectsEl.textContent = 0;
                     previewDate.textContent = '未选择';
                     previewLine.textContent = '未选择';
                     previewModel.textContent = '未填写';
-                    previewRecorder.textContent = recorderName;
+                    previewRecorder.textContent = '未填写';
                     previewTotalDefects.textContent = 0;
                     previewDefectTypes.textContent = '无';
-                    
-                    // 显示成功消息
-                    showNotification("您的记录已提交成功！", 0);
                 })
-                .catch(error => {
-                    console.error("添加记录失败: ", error);
-                    showNotification("提交失败，请重试！", 0);
+                .catch((error) => {
+                    showNotification(`提交失败: ${error.message}`, 'error');
                 });
         });
 
-        // 从Firestore获取记录
+        // 加载记录
         function loadRecords() {
-            defectRecordsRef.orderBy("timestamp", "desc").get()
-                .then((querySnapshot) => {
+            loadingIndicator.style.display = 'block';
+            
+            db.collection("records").orderBy("timestamp", "desc")
+                .onSnapshot((querySnapshot) => {
                     records = [];
+                    let totalDefects = 0;
+                    const activeLinesSet = new Set();
+                    
                     querySnapshot.forEach((doc) => {
                         const record = doc.data();
                         record.id = doc.id;
                         records.push(record);
+                        totalDefects += record.totalDefects;
+                        activeLinesSet.add(record.line);
                     });
                     
                     updateRecordHistory();
                     updateStats();
-                })
-                .catch((error) => {
-                    console.error("获取记录失败: ", error);
-                    recordHistory.innerHTML = `<div class="empty-state">加载记录失败，请刷新页面重试</div>`;
-                });
-        }
-
-        // 实时监听记录变化
-        function setupRealtimeListener() {
-            defectRecordsRef.orderBy("timestamp", "desc").onSnapshot((snapshot) => {
-                let hasNewRecords = false;
-                
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "added") {
-                        const record = change.doc.data();
-                        record.id = change.doc.id;
-                        
-                        // 检查是否为新记录（非初始加载）
-                        if (records.length > 0 && !records.some(r => r.id === record.id)) {
-                            hasNewRecords = true;
-                            newRecordsCount++;
-                        }
-                        
-                        // 更新本地记录数组
-                        const existingIndex = records.findIndex(r => r.id === record.id);
-                        if (existingIndex === -1) {
-                            records.push(record);
-                        } else {
-                            records[existingIndex] = record;
-                        }
-                    }
+                    loadingIndicator.style.display = 'none';
                     
-                    if (change.type === "modified") {
-                        const record = change.doc.data();
-                        record.id = change.doc.id;
-                        
-                        const existingIndex = records.findIndex(r => r.id === record.id);
-                        if (existingIndex !== -1) {
-                            records[existingIndex] = record;
-                        }
-                    }
-                    
-                    if (change.type === "removed") {
-                        const id = change.doc.id;
-                        const existingIndex = records.findIndex(r => r.id === id);
-                        if (existingIndex !== -1) {
-                            records.splice(existingIndex, 1);
-                        }
-                    }
+                    totalRecords.textContent = records.length;
+                    totalDefectsStat.textContent = totalDefects;
+                    activeLines.textContent = activeLinesSet.size;
+                }, (error) => {
+                    showNotification(`加载记录失败: ${error.message}`, 'error');
+                    loadingIndicator.style.display = 'none';
                 });
-                
-                // 更新UI
-                updateRecordHistory();
-                updateStats();
-                
-                // 显示新记录通知
-                if (hasNewRecords) {
-                    showNotification("有新的不良品记录提交", newRecordsCount);
-                }
-            }, (error) => {
-                console.error("实时监听失败: ", error);
-                realtimeStatus.innerHTML = `<i class="fas fa-circle" style="color:var(--danger)"></i> 连接断开`;
-            });
         }
 
         // 更新记录历史
         function updateRecordHistory() {
+            recordHistory.innerHTML = '';
+            
             if (records.length === 0) {
                 recordHistory.innerHTML = `
                     <div style="text-align: center; padding: 30px;">
@@ -1468,11 +1406,10 @@
                         <p style="color: var(--secondary);">暂无记录数据</p>
                     </div>
                 `;
-                recordCount.textContent = "已保存 0 条记录";
+                recordCount.textContent = `已保存 0 条记录`;
                 return;
             }
-
-            recordHistory.innerHTML = '';
+            
             const sortedRecords = sortRecords([...records]);
             const filteredRecords = filterRecords(sortedRecords);
 
@@ -1489,11 +1426,11 @@
                 dateGroup.classList.add('date-group');
                 dateGroup.innerHTML = `
                     <div class="date-header">
-                        <span>${date}</span>
+                        <span>${date} (${dateGroups[date].length}条记录)</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="date-records">
-                        ${dateGroups[date].map(record => `
+                        ${dateGroups[date].map((record) => `
                             <div class="record-item">
                                 <input type="checkbox" class="record-checkbox" data-id="${record.id}">
                                 <div class="record-header">
@@ -1568,12 +1505,14 @@
 
         // 更新统计信息
         function updateStats() {
-            totalRecords.textContent = records.length;
-            let totalDefectsSum = 0;
+            // 统计活跃产线数量
+            const lines = new Set();
             records.forEach(record => {
-                totalDefectsSum += record.totalDefects;
+                if (record.line) {
+                    lines.add(record.line);
+                }
             });
-            totalDefectsStat.textContent = totalDefectsSum;
+            activeLines.textContent = lines.size;
         }
 
         // 排序记录
@@ -1634,13 +1573,18 @@
 
         // 导出所有记录
         exportAllRecords.addEventListener('click', function () {
+            if (records.length === 0) {
+                showNotification('没有记录可导出', 'error');
+                return;
+            }
+            
             const ws = XLSX.utils.json_to_sheet(records.map(r => ({
                 "记录日期": r.date,
                 "生产产线": r.line + "线",
                 "产品型号": r.model,
                 "记录人员": r.recorder,
                 "不良品总数": r.totalDefects,
-                "不良品类型": r.defects.map(d => d.type).join(', '),
+                "不良品类型": r.defects.map(d => d.type).join(','),
                 "备注": r.remark,
                 "提交时间": new Date(r.timestamp).toLocaleString()
             })));
@@ -1659,27 +1603,28 @@
                     const recordId = checkbox.dataset.id;
                     const record = records.find(r => r.id === recordId);
                     if (record) {
-                        selectedRecords.push({
-                            "记录日期": record.date,
-                            "生产产线": record.line + "线",
-                            "产品型号": record.model,
-                            "记录人员": record.recorder,
-                            "不良品总数": record.totalDefects,
-                            "不良品类型": record.defects.map(d => d.type).join(', '),
-                            "备注": record.remark,
-                            "提交时间": new Date(record.timestamp).toLocaleString()
-                        });
+                        selectedRecords.push(record);
                     }
                 }
             });
 
             if (selectedRecords.length > 0) {
-                const ws = XLSX.utils.json_to_sheet(selectedRecords);
+                const ws = XLSX.utils.json_to_sheet(selectedRecords.map(r => ({
+                    "记录日期": r.date,
+                    "生产产线": r.line + "线",
+                    "产品型号": r.model,
+                    "记录人员": r.recorder,
+                    "不良品总数": r.totalDefects,
+                    "不良品类型": r.defects.map(d => d.type).join(','),
+                    "备注": r.remark,
+                    "提交时间": new Date(r.timestamp).toLocaleString()
+                })));
+                
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, '不良品记录');
                 XLSX.writeFile(wb, '不良品记录_选中记录.xlsx');
             } else {
-                showNotification("请选择要导出的记录", 0);
+                showNotification('请先选择要导出的记录', 'error');
             }
         });
 
@@ -1687,31 +1632,30 @@
         deleteSelectedRecords.addEventListener('click', function () {
             const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
             const selectedIds = [];
+            
             checkboxes.forEach(checkbox => {
                 if (checkbox.checked) {
                     selectedIds.push(checkbox.dataset.id);
                 }
             });
-
+            
             if (selectedIds.length === 0) return;
-
-            // 批量删除
+            
             const batch = db.batch();
+            
             selectedIds.forEach(id => {
-                const docRef = defectRecordsRef.doc(id);
+                const docRef = db.collection("records").doc(id);
                 batch.delete(docRef);
             });
-
+            
             batch.commit()
                 .then(() => {
-                    // 成功，实时监听会更新记录
+                    showNotification('成功删除选中的记录', 'success');
                     selectAllRecords.checked = false;
                     updateSelectedCount();
-                    showNotification("已删除选中记录", selectedIds.length);
                 })
-                .catch(error => {
-                    console.error("批量删除失败: ", error);
-                    showNotification("删除失败，请重试！", 0);
+                .catch((error) => {
+                    showNotification(`删除失败: ${error.message}`, 'error');
                 });
         });
 
@@ -1726,15 +1670,14 @@
 
         // 确认删除单条记录
         confirmDelete.addEventListener('click', function () {
-            defectRecordsRef.doc(currentDeleteRecordId).delete()
+            db.collection("records").doc(currentDeleteRecordId).delete()
                 .then(() => {
+                    showNotification('记录已删除', 'success');
                     deleteModal.style.display = 'none';
-                    showNotification("记录已删除", 1);
                 })
-                .catch(error => {
-                    console.error("删除记录失败: ", error);
+                .catch((error) => {
+                    showNotification(`删除失败: ${error.message}`, 'error');
                     deleteModal.style.display = 'none';
-                    showNotification("删除失败，请重试！", 0);
                 });
         });
 
@@ -1746,14 +1689,12 @@
             previewRecorder.textContent = document.getElementById('recorder').value || '未填写';
         });
 
-        // 排序和筛选变化时更新记录历史
+        // 排序和筛选变更时更新记录
         document.getElementById('sortField').addEventListener('change', updateRecordHistory);
         document.getElementById('sortOrder').addEventListener('change', updateRecordHistory);
         document.getElementById('filterLine').addEventListener('change', updateRecordHistory);
-
-        // 初始化
-        setupPresence();
-        setupRealtimeListener();
+        
+        // 初始化加载记录
         loadRecords();
         
         // 设置默认日期为今天
@@ -1762,5 +1703,4 @@
         previewDate.textContent = today;
     </script>
 </body>
-
 </html>
