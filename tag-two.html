@@ -31,6 +31,9 @@
             --industrial-blue: #005b9f;
             --industrial-orange: #ff6b35;
             --industrial-green: #4caf50;
+            --steel-gray: #3a4a58;
+            --metal-silver: #a0a7b0;
+            --factory-yellow: #ffb300;
         }
 
         body {
@@ -54,12 +57,14 @@
         }
 
         .header-content {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
             position: relative;
             z-index: 2;
+            border: 1px solid rgba(0, 91, 159, 0.1);
+            background-image: linear-gradient(to right, rgba(0, 91, 159, 0.05), rgba(0, 91, 159, 0.01));
         }
 
         header h1 {
@@ -68,9 +73,10 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             position: relative;
             display: inline-block;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         header h1 i {
@@ -86,21 +92,23 @@
         }
 
         header p {
-            color: var(--secondary);
-            font-size: 1.1rem;
+            color: var(--steel-gray);
+            font-size: 1.15rem;
             max-width: 700px;
             margin: 25px auto 0;
+            font-weight: 500;
         }
 
         .card {
             background: white;
             border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             padding: 30px;
             margin-bottom: 30px;
             transition: transform 0.3s, box-shadow 0.3s;
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .card:before {
@@ -108,21 +116,21 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 5px;
+            width: 6px;
             height: 100%;
             background: linear-gradient(to bottom, var(--industrial-blue), var(--industrial-green));
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
 
         .card-title {
             display: flex;
             align-items: center;
             color: var(--industrial-blue);
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 2px solid var(--gray);
@@ -148,8 +156,16 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: var(--dark);
+            color: var(--steel-gray);
             font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: var(--industrial-blue);
+            font-size: 1.1rem;
         }
 
         .form-control {
@@ -158,18 +174,19 @@
             border: 2px solid var(--gray);
             border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            background-color: #fcfdff;
         }
 
         .form-control:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+            border-color: var(--industrial-blue);
+            box-shadow: 0 0 0 3px rgba(0, 91, 159, 0.2);
         }
 
         select.form-control {
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235f6368' d='M6 7.4L0 1.4 1.4 0 6 4.6 10.6 0 12 1.4z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23005b9f' d='M6 7.4L0 1.4 1.4 0 6 4.6 10.6 0 12 1.4z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 15px center;
             background-size: 12px;
@@ -187,13 +204,13 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
         }
 
         .btn:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
         }
 
         .btn-block {
@@ -206,7 +223,7 @@
         .btn-reset {
             background: #f1f3f4;
             color: var(--secondary);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
         }
 
         .btn-reset:hover {
@@ -234,14 +251,16 @@
             padding: 20px;
             margin-top: 25px;
             border: 1px solid #e0e0e0;
+            background: linear-gradient(to right, rgba(0, 91, 159, 0.03), rgba(255, 255, 255, 0.8));
         }
 
         .preview-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--industrial-blue);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
+            font-weight: 600;
         }
 
         .preview-title i {
@@ -259,7 +278,13 @@
             padding: 15px;
             border-radius: 8px;
             border-left: 4px solid var(--industrial-blue);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .preview-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
         }
 
         .preview-label {
@@ -280,6 +305,7 @@
             padding: 15px 20px;
             border-radius: 0 8px 8px 0;
             margin: 25px 0;
+            background: linear-gradient(to right, rgba(0, 91, 159, 0.08), rgba(255, 255, 255, 0.8));
         }
 
         .instructions h3 {
@@ -287,6 +313,7 @@
             margin-bottom: 10px;
             display: flex;
             align-items: center;
+            font-size: 1.25rem;
         }
 
         .instructions h3 i {
@@ -300,6 +327,7 @@
         .instructions li {
             margin-bottom: 8px;
             line-height: 1.5;
+            color: var(--steel-gray);
         }
 
         .defect-section {
@@ -308,6 +336,7 @@
             background: #f8f9fa;
             border-radius: 8px;
             border: 1px solid #e0e0e0;
+            background: linear-gradient(to right, rgba(0, 91, 159, 0.03), rgba(255, 255, 255, 0.8));
         }
 
         .defect-header {
@@ -318,10 +347,11 @@
         }
 
         .defect-title {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: var(--industrial-blue);
             display: flex;
             align-items: center;
+            font-weight: 600;
         }
 
         .defect-title i {
@@ -350,12 +380,20 @@
             padding: 12px;
             border-bottom: 1px solid var(--gray);
             align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .defect-item:hover {
+            background-color: #f0f7ff;
         }
 
         .defect-item:first-child {
             font-weight: bold;
             background: #e8f0fe;
             border-radius: 6px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
         .total-defects {
@@ -365,11 +403,13 @@
             font-weight: bold;
             font-size: 1.1rem;
             color: var(--industrial-blue);
+            padding: 10px 0;
         }
 
         textarea {
             min-height: 100px;
             resize: vertical;
+            background-color: #fcfdff;
         }
 
         .remark-section {
@@ -389,6 +429,7 @@
             color: var(--secondary);
             font-size: 0.95rem;
             margin-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .logo {
@@ -422,6 +463,7 @@
 
             .defect-item {
                 grid-template-columns: 1fr;
+                text-align: center;
             }
         }
 
@@ -442,12 +484,12 @@
 
         /* 新增样式 */
         .btn-export {
-            background: var(--purple);
+            background: var(--factory-yellow);
             margin-top: 15px;
         }
 
         .btn-export:hover {
-            background: #512da8;
+            background: #e6a000;
         }
 
         .record-history {
@@ -474,6 +516,7 @@
             border-radius: 6px;
             border: 1px solid var(--gray);
             font-size: 0.95rem;
+            background-color: #fcfdff;
         }
 
         .date-group {
@@ -490,6 +533,7 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
+            background: linear-gradient(to right, rgba(0, 91, 159, 0.1), rgba(0, 91, 159, 0.05));
         }
 
         .date-header i {
@@ -545,6 +589,11 @@
             background: #f8f9fa;
             border-radius: 6px;
             border: 1px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+
+        .record-preview-item:hover {
+            background: #eef7ff;
         }
 
         .record-preview-label {
@@ -564,6 +613,7 @@
             border-radius: 8px;
             display: flex;
             align-items: center;
+            background: linear-gradient(to right, rgba(0, 91, 159, 0.03), rgba(255, 255, 255, 0.8));
         }
 
         .select-all-label {
@@ -591,6 +641,7 @@
             background: #f8f9fa;
             border-radius: 8px;
             border: 1px solid #e8f0fe;
+            background: linear-gradient(to right, rgba(0, 91, 159, 0.05), rgba(255, 255, 255, 0.8));
         }
 
         .selected-count {
@@ -599,12 +650,12 @@
         }
 
         .btn-export-selected {
-            background: var(--success);
+            background: var(--industrial-green);
             margin-top: 10px;
         }
 
         .btn-export-selected:hover {
-            background: #2e7d32;
+            background: #3d8b40;
         }
 
         /* 底部导出区域样式 */
@@ -614,14 +665,16 @@
             background: #f8f9fa;
             border-radius: 8px;
             border: 1px solid #e8f0fe;
+            background: linear-gradient(to right, rgba(0, 91, 159, 0.03), rgba(255, 255, 255, 0.8));
         }
 
         .export-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--industrial-blue);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
+            font-weight: 600;
         }
 
         .export-title i {
@@ -634,16 +687,22 @@
             background: #e8f0fe;
             border-radius: 8px;
             border-left: 4px solid var(--industrial-blue);
+            background: linear-gradient(to right, rgba(0, 91, 159, 0.08), rgba(255, 255, 255, 0.8));
         }
 
         .export-instructions h4 {
             color: var(--industrial-blue);
             margin-bottom: 8px;
+            font-size: 1.1rem;
         }
 
         .export-instructions ul {
             padding-left: 20px;
             margin-bottom: 10px;
+        }
+
+        .export-instructions li {
+            color: var(--steel-gray);
         }
 
         /* 删除记录按钮样式 */
@@ -682,7 +741,7 @@
         .delete-modal-content {
             background-color: white;
             margin: 15% auto;
-            padding: 20px;
+            padding: 30px;
             border-radius: 12px;
             width: 90%;
             max-width: 500px;
@@ -706,20 +765,28 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border-bottom: 1px solid var(--gray);
-            padding-bottom: 10px;
+            padding-bottom: 15px;
         }
 
         .delete-modal-title {
             color: var(--dark);
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .delete-modal-title i {
+            margin-right: 12px;
+            color: var(--danger);
+            font-size: 1.5rem;
         }
 
         .delete-modal-close {
             color: var(--secondary);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             cursor: pointer;
         }
 
@@ -728,13 +795,15 @@
         }
 
         .delete-modal-message {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.6;
         }
 
         .delete-modal-actions {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
+            gap: 15px;
         }
 
         /* 批量删除按钮样式 */
@@ -758,33 +827,57 @@
         .stat-card {
             background: white;
             border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
             text-align: center;
             transition: transform 0.3s;
-            border-left: 4px solid var(--industrial-blue);
+            border-left: 5px solid var(--industrial-blue);
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.9), rgba(240, 247, 255, 0.9));
+            position: relative;
+            overflow: hidden;
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-card:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background: var(--industrial-blue);
+            opacity: 0.05;
+            border-radius: 50%;
+            transform: translate(40px, -40px);
         }
 
         .stat-icon {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 15px;
             color: var(--industrial-blue);
+            position: relative;
+            z-index: 1;
         }
 
         .stat-value {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: bold;
             color: var(--industrial-blue);
             margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
         }
 
         .stat-label {
-            color: var(--secondary);
-            font-size: 1rem;
+            color: var(--steel-gray);
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
         }
         
         /* 加载动画 */
@@ -812,10 +905,12 @@
             border-radius: 8px;
             color: white;
             font-weight: 500;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
             z-index: 1001;
             transform: translateX(200%);
             transition: transform 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
         }
         
         .notification.show {
@@ -834,6 +929,11 @@
             background-color: var(--primary);
         }
         
+        .notification i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
         /* 工厂背景装饰 */
         .factory-bg {
             position: absolute;
@@ -850,11 +950,104 @@
         .factory-icon {
             position: absolute;
             font-size: 20rem;
-            color: rgba(0, 91, 159, 0.03);
+            color: rgba(0, 91, 159, 0.02);
             z-index: 0;
             bottom: -50px;
             right: -50px;
             transform: rotate(15deg);
+        }
+        
+        /* 新增缺陷类型数量标签 */
+        .defect-type-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: var(--industrial-blue);
+            color: white;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            margin-left: 6px;
+        }
+        
+        /* 分页控件样式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .pagination button {
+            padding: 8px 16px;
+            background: var(--industrial-blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .pagination button:hover:not(:disabled) {
+            background: var(--primary-dark);
+        }
+        
+        .pagination button:disabled {
+            background: var(--metal-silver);
+            cursor: not-allowed;
+        }
+        
+        .pagination-info {
+            text-align: center;
+            margin-top: 10px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .pagination-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 10px;
+        }
+        
+        .pagination-input input {
+            width: 60px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--gray);
+            text-align: center;
+            font-size: 1rem;
+        }
+        
+        .pagination-input button {
+            padding: 8px 12px;
+            background: var(--industrial-green);
+        }
+        
+        .pagination-input button:hover {
+            background: #3d8b40;
+        }
+        
+        /* 删除确认窗口样式 */
+        .delete-modal-icon {
+            text-align: center;
+            font-size: 4rem;
+            color: var(--danger);
+            margin: 20px 0;
+        }
+        
+        .delete-modal-text {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .delete-modal-count {
+            font-weight: bold;
+            color: var(--danger);
+            font-size: 1.4rem;
         }
     </style>
 </head>
@@ -964,14 +1157,19 @@
                             <label for="defectType"><i class="fas fa-tag"></i> 不良品类型</label>
                             <select id="defectType" class="form-control">
                                 <option value="">-- 请选择类型 --</option>
-                                <option value="外观缺陷">外观缺陷</option>
-                                <option value="尺寸偏差">尺寸偏差</option>
-                                <option value="材料问题">材料问题</option>
-                                <option value="绝缘不良">绝缘不良</option>
-                                <option value="焊接问题">焊接问题</option>
-                                <option value="性能不良">性能不良</option>
-                                <option value="绕线问题">绕线问题</option>
-                                <option value="其他问题">其他问题</option>
+                                <option value="扁线">扁线</option>
+                                <option value="引线头损坏">引线头损坏</option>
+                                <option value="引出线过长">引出线过长</option>
+                                <option value="飞线断线">飞线断线</option>
+                                <option value="副相过桥线断线">副相过桥线断线</option>
+                                <option value="副相大槽断线">副相大槽断线</option>
+                                <option value="主相反侧大槽断线">主相反侧大槽断线</option>
+                                <option value="铁芯刮伤">铁芯刮伤</option>
+                                <option value="线伤">线伤</option>
+                                <option value="漏绑">漏绑</option>
+                                <option value="槽盖纸未插到位">槽盖纸未插到位</option>
+                                <option value="铁芯变形">铁芯变形</option>
+                                <option value="其他">其他</option>
                             </select>
                         </div>
 
@@ -1109,6 +1307,23 @@
                 <div class="loader" id="loadingIndicator"></div>
             </div>
 
+            <!-- 分页控件 -->
+            <div class="pagination">
+                <button id="prevPage" disabled><i class="fas fa-chevron-left"></i> 上一页</button>
+                
+                <div class="pagination-input">
+                    <span>第</span>
+                    <input type="number" id="pageInput" min="1" value="1">
+                    <span>页</span>
+                    <button id="goToPage"><i class="fas fa-arrow-right"></i> 跳转</button>
+                </div>
+                
+                <button id="nextPage">下一页 <i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="pagination-info">
+                当前第 <span id="currentPage">1</span> 页 | 共 <span id="totalPages">1</span> 页
+            </div>
+
             <!-- 选中记录统计 -->
             <div class="selected-records">
                 <p>已选择 <span id="selectedCount" class="selected-count">0</span> 条记录</p>
@@ -1160,13 +1375,19 @@
     <div id="deleteModal" class="delete-modal">
         <div class="delete-modal-content">
             <div class="delete-modal-header">
-                <span class="delete-modal-title">确认删除</span>
+                <span class="delete-modal-title"><i class="fas fa-exclamation-triangle"></i> 确认删除</span>
                 <span id="deleteModalClose" class="delete-modal-close">&times;</span>
             </div>
-            <div class="delete-modal-message">
-                <p>您确定要删除这条记录吗？</p>
-                <p class="text-danger">此操作不可撤销！</p>
+            
+            <div class="delete-modal-icon">
+                <i class="fas fa-trash-alt"></i>
             </div>
+            
+            <div class="delete-modal-text">
+                <p>您确定要删除选中的 <span id="deleteCount" class="delete-modal-count">0</span> 条记录吗？</p>
+                <p>此操作不可撤销，所有数据将被永久删除！</p>
+            </div>
+            
             <div class="delete-modal-actions">
                 <button type="button" id="confirmDelete" class="btn btn-danger">确认删除</button>
                 <button type="button" id="cancelDelete" class="btn btn-secondary">取消</button>
@@ -1221,14 +1442,24 @@
         const cancelDelete = document.getElementById('cancelDelete');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const notification = document.getElementById('notification');
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        const currentPageEl = document.getElementById('currentPage');
+        const totalPagesEl = document.getElementById('totalPages');
+        const pageInput = document.getElementById('pageInput');
+        const goToPageBtn = document.getElementById('goToPage');
+        const deleteCount = document.getElementById('deleteCount');
 
         // 存储所有记录
         let records = [];
         let currentDeleteRecordId;
+        let currentPage = 1;
+        const daysPerPage = 10; // 每页显示10天的记录
+        let selectedRecordIds = new Set(); // 存储所有选中的记录ID（跨页）
 
         // 显示通知
         function showNotification(message, type) {
-            notification.textContent = message;
+            notification.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${message}`;
             notification.className = `notification ${type} show`;
             
             setTimeout(() => {
@@ -1242,6 +1473,9 @@
             const defectQuantity = document.getElementById('defectQuantity');
 
             if (defectType.value && defectQuantity.value > 0) {
+                // 隐藏"暂无不良品记录"提示
+                emptyDefects.style.display = 'none';
+                
                 const newDefect = document.createElement('div');
                 newDefect.classList.add('defect-item');
                 newDefect.innerHTML = `
@@ -1255,7 +1489,6 @@
                 `;
 
                 defectList.appendChild(newDefect);
-                emptyDefects.style.display = 'none';
 
                 // 计算总不良品数量
                 let total = 0;
@@ -1266,10 +1499,12 @@
                 totalDefectsEl.textContent = total;
                 previewTotalDefects.textContent = total;
 
-                // 更新预览的不良品类型
+                // 更新预览的不良品类型（带数量）
                 const defectTypes = [];
                 defectItems.forEach(item => {
-                    defectTypes.push(item.children[0].textContent);
+                    const type = item.children[0].textContent;
+                    const quantity = item.children[1].textContent;
+                    defectTypes.push(`${type}(${quantity})`);
                 });
                 previewDefectTypes.textContent = defectTypes.join(', ');
 
@@ -1293,7 +1528,9 @@
                     // 更新预览的不良品类型
                     const newDefectTypes = [];
                     newDefectItems.forEach(item => {
-                        newDefectTypes.push(item.children[0].textContent);
+                        const type = item.children[0].textContent;
+                        const quantity = item.children[1].textContent;
+                        newDefectTypes.push(`${type}(${quantity})`);
                     });
                     previewDefectTypes.textContent = newDefectTypes.join(', ') || '无';
                 });
@@ -1351,6 +1588,9 @@
                         </div>
                         <div class="empty-state" id="emptyDefects">暂无不良品记录，请添加项目</div>
                     `;
+                    // 显示"暂无不良品记录"提示
+                    emptyDefects.style.display = 'block';
+                    
                     totalDefectsEl.textContent = 0;
                     previewDate.textContent = '未选择';
                     previewLine.textContent = '未选择';
@@ -1358,6 +1598,11 @@
                     previewRecorder.textContent = '未填写';
                     previewTotalDefects.textContent = 0;
                     previewDefectTypes.textContent = '无';
+                    
+                    // 重置日期为今天
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('recordDate').value = today;
+                    previewDate.textContent = today;
                 })
                 .catch((error) => {
                     showNotification(`提交失败: ${error.message}`, 'error');
@@ -1407,6 +1652,11 @@
                     </div>
                 `;
                 recordCount.textContent = `已保存 0 条记录`;
+                // 更新分页信息
+                totalPagesEl.textContent = 0;
+                currentPageEl.textContent = 0;
+                prevPageBtn.disabled = true;
+                nextPageBtn.disabled = true;
                 return;
             }
             
@@ -1421,7 +1671,37 @@
                 dateGroups[record.date].push(record);
             });
 
-            for (const date in dateGroups) {
+            // 获取所有日期并排序（降序）
+            const dateGroupKeys = Object.keys(dateGroups).sort((a, b) => b.localeCompare(a));
+            
+            // 计算总页数（按天数）
+            const totalPages = Math.ceil(dateGroupKeys.length / daysPerPage);
+            totalPagesEl.textContent = totalPages;
+            pageInput.max = totalPages;
+            
+            // 检查当前页是否超出范围（比如在删除记录后当前页可能大于总页数）
+            if (currentPage > totalPages && totalPages > 0) {
+                currentPage = totalPages;
+            }
+            if (currentPage < 1 && totalPages > 0) {
+                currentPage = 1;
+            }
+            
+            // 更新当前页码显示
+            currentPageEl.textContent = currentPage;
+            pageInput.value = currentPage;
+            
+            // 更新分页按钮状态
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
+            
+            // 计算当前页应该显示的日期范围
+            const startIndex = (currentPage - 1) * daysPerPage;
+            const endIndex = Math.min(startIndex + daysPerPage, dateGroupKeys.length);
+            const currentDateKeys = dateGroupKeys.slice(startIndex, endIndex);
+            
+            // 渲染当前页的日期组
+            for (const date of currentDateKeys) {
                 const dateGroup = document.createElement('div');
                 dateGroup.classList.add('date-group');
                 dateGroup.innerHTML = `
@@ -1432,7 +1712,7 @@
                     <div class="date-records">
                         ${dateGroups[date].map((record) => `
                             <div class="record-item">
-                                <input type="checkbox" class="record-checkbox" data-id="${record.id}">
+                                <input type="checkbox" class="record-checkbox" data-id="${record.id}" ${selectedRecordIds.has(record.id) ? 'checked' : ''}>
                                 <div class="record-header">
                                     <h4>生产产线: ${record.line}线</h4>
                                     <span class="record-time">提交时间: ${new Date(record.timestamp).toLocaleString()}</span>
@@ -1452,7 +1732,9 @@
                                     </div>
                                     <div class="record-preview-item">
                                         <div class="record-preview-label">不良品类型</div>
-                                        <div class="record-preview-value">${record.defects.map(defect => defect.type).join(', ')}</div>
+                                        <div class="record-preview-value">
+                                            ${record.defects.map(defect => `${defect.type}(${defect.quantity})`).join(', ')}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="record-actions">
@@ -1477,8 +1759,21 @@
                 const deleteButtons = dateGroup.querySelectorAll('.btn-delete');
                 deleteButtons.forEach(button => {
                     button.addEventListener('click', function () {
-                        currentDeleteRecordId = this.dataset.id;
-                        deleteModal.style.display = 'block';
+                        const recordId = this.dataset.id;
+                        if (confirm('确定要删除这条记录吗？')) {
+                            db.collection("records").doc(recordId).delete()
+                                .then(() => {
+                                    showNotification('记录已删除', 'success');
+                                    // 如果这个记录在选中的集合中，则移除
+                                    selectedRecordIds.delete(recordId);
+                                    updateSelectedCount();
+                                    // 重新加载记录
+                                    loadRecords();
+                                })
+                                .catch((error) => {
+                                    showNotification(`删除失败: ${error.message}`, 'error');
+                                });
+                        }
                     });
                 });
             }
@@ -1487,6 +1782,12 @@
             selectAllRecords.addEventListener('change', function () {
                 const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
                 checkboxes.forEach(checkbox => {
+                    const recordId = checkbox.dataset.id;
+                    if (this.checked) {
+                        selectedRecordIds.add(recordId);
+                    } else {
+                        selectedRecordIds.delete(recordId);
+                    }
                     checkbox.checked = this.checked;
                 });
                 updateSelectedCount();
@@ -1496,6 +1797,12 @@
             const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
+                    const recordId = this.dataset.id;
+                    if (this.checked) {
+                        selectedRecordIds.add(recordId);
+                    } else {
+                        selectedRecordIds.delete(recordId);
+                    }
                     updateSelectedCount();
                 });
             });
@@ -1539,12 +1846,15 @@
                         valueA = a.timestamp;
                         valueB = b.timestamp;
                         break;
+                    default:
+                        valueA = a.timestamp;
+                        valueB = b.timestamp;
                 }
 
                 if (sortOrder === 'asc') {
-                    return valueA - valueB;
+                    return valueA > valueB ? 1 : -1;
                 } else {
-                    return valueB - valueA;
+                    return valueA < valueB ? 1 : -1;
                 }
             });
         }
@@ -1560,18 +1870,11 @@
 
         // 更新选中记录数量
         function updateSelectedCount() {
-            const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
-            let count = 0;
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    count++;
-                }
-            });
-            selectedCount.textContent = count;
-            deleteSelectedRecords.disabled = count === 0;
+            selectedCount.textContent = selectedRecordIds.size;
+            deleteSelectedRecords.disabled = selectedRecordIds.size === 0;
         }
 
-        // 导出所有记录
+        // 导出所有记录（增强版，包含每个不良品类型的数量）
         exportAllRecords.addEventListener('click', function () {
             if (records.length === 0) {
                 showNotification('没有记录可导出', 'error');
@@ -1584,7 +1887,7 @@
                 "产品型号": r.model,
                 "记录人员": r.recorder,
                 "不良品总数": r.totalDefects,
-                "不良品类型": r.defects.map(d => d.type).join(','),
+                "不良品详情": r.defects.map(d => `${d.type}:${d.quantity}`).join(', '),
                 "备注": r.remark,
                 "提交时间": new Date(r.timestamp).toLocaleString()
             })));
@@ -1594,69 +1897,40 @@
             XLSX.writeFile(wb, '不良品记录_所有记录.xlsx');
         });
 
-        // 导出选中记录
+        // 导出选中记录（增强版，包含每个不良品类型的数量）
         exportSelectedRecords.addEventListener('click', function () {
-            const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
-            const selectedRecords = [];
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    const recordId = checkbox.dataset.id;
-                    const record = records.find(r => r.id === recordId);
-                    if (record) {
-                        selectedRecords.push(record);
-                    }
-                }
-            });
-
-            if (selectedRecords.length > 0) {
-                const ws = XLSX.utils.json_to_sheet(selectedRecords.map(r => ({
-                    "记录日期": r.date,
-                    "生产产线": r.line + "线",
-                    "产品型号": r.model,
-                    "记录人员": r.recorder,
-                    "不良品总数": r.totalDefects,
-                    "不良品类型": r.defects.map(d => d.type).join(','),
-                    "备注": r.remark,
-                    "提交时间": new Date(r.timestamp).toLocaleString()
-                })));
-                
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, '不良品记录');
-                XLSX.writeFile(wb, '不良品记录_选中记录.xlsx');
-            } else {
+            if (selectedRecordIds.size === 0) {
                 showNotification('请先选择要导出的记录', 'error');
+                return;
             }
+            
+            const selectedRecords = records.filter(record => selectedRecordIds.has(record.id));
+            
+            const ws = XLSX.utils.json_to_sheet(selectedRecords.map(r => ({
+                "记录日期": r.date,
+                "生产产线": r.line + "线",
+                "产品型号": r.model,
+                "记录人员": r.recorder,
+                "不良品总数": r.totalDefects,
+                "不良品详情": r.defects.map(d => `${d.type}:${d.quantity}`).join(', '),
+                "备注": r.remark,
+                "提交时间": new Date(r.timestamp).toLocaleString()
+            })));
+            
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '不良品记录');
+            XLSX.writeFile(wb, '不良品记录_选中记录.xlsx');
         });
 
-        // 批量删除选中记录
+        // 批量删除选中记录（增强版，支持跨页选择）
         deleteSelectedRecords.addEventListener('click', function () {
-            const checkboxes = recordHistory.querySelectorAll('.record-checkbox');
-            const selectedIds = [];
+            if (selectedRecordIds.size === 0) return;
             
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    selectedIds.push(checkbox.dataset.id);
-                }
-            });
+            // 更新删除确认窗口中的记录数量
+            deleteCount.textContent = selectedRecordIds.size;
             
-            if (selectedIds.length === 0) return;
-            
-            const batch = db.batch();
-            
-            selectedIds.forEach(id => {
-                const docRef = db.collection("records").doc(id);
-                batch.delete(docRef);
-            });
-            
-            batch.commit()
-                .then(() => {
-                    showNotification('成功删除选中的记录', 'success');
-                    selectAllRecords.checked = false;
-                    updateSelectedCount();
-                })
-                .catch((error) => {
-                    showNotification(`删除失败: ${error.message}`, 'error');
-                });
+            // 显示删除确认窗口
+            deleteModal.style.display = 'block';
         });
 
         // 关闭删除确认对话框
@@ -1668,12 +1942,27 @@
             deleteModal.style.display = 'none';
         });
 
-        // 确认删除单条记录
+        // 确认删除选中的记录
         confirmDelete.addEventListener('click', function () {
-            db.collection("records").doc(currentDeleteRecordId).delete()
+            const batch = db.batch();
+            const selectedIdsArray = Array.from(selectedRecordIds);
+            
+            selectedIdsArray.forEach(id => {
+                const docRef = db.collection("records").doc(id);
+                batch.delete(docRef);
+            });
+            
+            batch.commit()
                 .then(() => {
-                    showNotification('记录已删除', 'success');
+                    showNotification(`成功删除 ${selectedIdsArray.length} 条记录`, 'success');
+                    // 清空选中记录集合
+                    selectedRecordIds.clear();
+                    // 更新选中计数
+                    updateSelectedCount();
+                    // 关闭删除确认窗口
                     deleteModal.style.display = 'none';
+                    // 重新加载记录
+                    loadRecords();
                 })
                 .catch((error) => {
                     showNotification(`删除失败: ${error.message}`, 'error');
@@ -1689,10 +1978,75 @@
             previewRecorder.textContent = document.getElementById('recorder').value || '未填写';
         });
 
-        // 排序和筛选变更时更新记录
-        document.getElementById('sortField').addEventListener('change', updateRecordHistory);
-        document.getElementById('sortOrder').addEventListener('change', updateRecordHistory);
-        document.getElementById('filterLine').addEventListener('change', updateRecordHistory);
+        // 排序和筛选变更时更新记录（并重置当前页为1）
+        document.getElementById('sortField').addEventListener('change', function() {
+            currentPage = 1;
+            updateRecordHistory();
+        });
+        document.getElementById('sortOrder').addEventListener('change', function() {
+            currentPage = 1;
+            updateRecordHistory();
+        });
+        document.getElementById('filterLine').addEventListener('change', function() {
+            currentPage = 1;
+            updateRecordHistory();
+        });
+        
+        // 分页按钮事件
+        prevPageBtn.addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                updateRecordHistory();
+            }
+        });
+        
+        nextPageBtn.addEventListener('click', function() {
+            // 计算总页数
+            const dateGroups = {};
+            const filteredRecords = filterRecords(records);
+            filteredRecords.forEach(record => {
+                if (!dateGroups[record.date]) {
+                    dateGroups[record.date] = [];
+                }
+                dateGroups[record.date].push(record);
+            });
+            const dateGroupKeys = Object.keys(dateGroups).sort((a, b) => b.localeCompare(a));
+            const totalPages = Math.ceil(dateGroupKeys.length / daysPerPage);
+            
+            if (currentPage < totalPages) {
+                currentPage++;
+                updateRecordHistory();
+            }
+        });
+        
+        // 页面跳转事件
+        goToPageBtn.addEventListener('click', function() {
+            const pageNum = parseInt(pageInput.value);
+            const dateGroups = {};
+            const filteredRecords = filterRecords(records);
+            filteredRecords.forEach(record => {
+                if (!dateGroups[record.date]) {
+                    dateGroups[record.date] = [];
+                }
+                dateGroups[record.date].push(record);
+            });
+            const dateGroupKeys = Object.keys(dateGroups).sort((a, b) => b.localeCompare(a));
+            const totalPages = Math.ceil(dateGroupKeys.length / daysPerPage);
+            
+            if (pageNum >= 1 && pageNum <= totalPages) {
+                currentPage = pageNum;
+                updateRecordHistory();
+            } else {
+                showNotification(`请输入有效的页码 (1-${totalPages})`, 'error');
+            }
+        });
+        
+        // 输入框回车事件
+        pageInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                goToPageBtn.click();
+            }
+        });
         
         // 初始化加载记录
         loadRecords();
